@@ -61,7 +61,7 @@ cd packages
 
 Para desenvolvimento, dentro dos respectivos diretórios, execute o `pnpm install` e depois os comandos para build local:
 
-- **Host**: `pnpm run dev`
+- **Host**: `pnpm run build`
 - **Remote Login**: `pnpm run build`
 - **Remote Sales**: `pnpm run build`
 - **Remote Stock**: `pnpm run build`

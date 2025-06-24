@@ -7,6 +7,9 @@ export default defineConfig({
 		react(),
 		federation({
 			name: 'app',
+			exposes: {
+				'./store': './src/store/index.ts',
+			},
 			remotes: {
 				remoteLogin: 'http://localhost:5001/assets/remoteEntry.js',
 				remoteSales: 'http://localhost:5002/assets/remoteEntry.js',
