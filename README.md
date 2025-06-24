@@ -12,7 +12,7 @@ Este projeto contém quatro microfrontends desenvolvidos em React, para o Hackat
    ├── remote_login
    ├── remote_sales
    └── remote_stock
-
+```
 
 ### Descrição dos Serviços
 
