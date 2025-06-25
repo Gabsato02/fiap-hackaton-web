@@ -17,9 +17,12 @@ import FlagIcon from '@mui/icons-material/Flag';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Divider from '@mui/material/Divider';
 import { MainAppBarProps, RemoteProjects } from '../../domain/entities';
+import { useUserStore } from '../../store';
+import Avatar from '@mui/material/Avatar';
 
 export default function MainDrawer({ onChangePage }: MainAppBarProps) {
   const [open, setOpen] = React.useState(false);
+  const { userInfo } = useUserStore();  
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -50,11 +53,9 @@ export default function MainDrawer({ onChangePage }: MainAppBarProps) {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        <ListItem sx={{ paddingY: 2 }}>
-          <ListItemIcon>
-            <AccountCircleIcon />
-          </ListItemIcon>
-          <ListItemText primary="Bem vindo, Usuário!" />
+        <ListItem sx={{ paddingY: 2, gap: 2 }}>
+          <Avatar alt={userInfo.name} src={userInfo.photoURL} />
+          <ListItemText primary={userInfo.name} />
         </ListItem>
         <Divider sx={{ marginBottom: 2 }} />
         {DRAWER_LIST.map(({ text, icon, route }) => (

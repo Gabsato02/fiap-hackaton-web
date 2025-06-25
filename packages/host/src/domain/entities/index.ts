@@ -10,4 +10,12 @@ export type RemoteProjects = {
   route: string,
   text: string,
   icon: React.ReactNode,
-}
+};
+
+export type UserInfo = {
+  token: string,
+  email: string,
+  name: string,
+  photoURL: string,
+  id: string,
+};

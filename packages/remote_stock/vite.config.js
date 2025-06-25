@@ -9,7 +9,7 @@ export default defineConfig({
 			name: 'remote_stock',
 			filename: 'remoteEntry.js',
 			exposes: {
-				'./Stock': './src/Stock',
+				'./Stock': './src/presentation/views/Stock',
 			},
 			shared: ['react', 'react-dom'],
 		}),

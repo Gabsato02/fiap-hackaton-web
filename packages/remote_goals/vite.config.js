@@ -9,7 +9,7 @@ export default defineConfig({
 			name: 'remote_goals',
 			filename: 'remoteEntry.js',
 			exposes: {
-				'./Goals': './src/Goals',
+				'./Goals': './src/presentation/views/Goals',
 			},
 			shared: ['react', 'react-dom'],
 		}),

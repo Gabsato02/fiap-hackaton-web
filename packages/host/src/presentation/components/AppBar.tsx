@@ -6,25 +6,53 @@ import Typography from '@mui/material/Typography';
 import Drawer from './Drawer';
 import IconButton from '@mui/material/IconButton';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { MainAppBarProps } from '../../domain/entities';
+import { MainAppBarProps, UserInfo } from '../../domain/entities';
+import { useUserStore } from '../../store';
+import { getAuth, signOut } from "firebase/auth";
+import CircularProgress from '@mui/material/CircularProgress';
 
 export default function MainAppBar({ onChangePage }: MainAppBarProps) {
+  const { userInfo, setUserInfo } = useUserStore();
+  const [loading, setLoading] = React.useState(false);  
+
+  const handleSignout = async () => {
+    const auth = getAuth();
+    setLoading(true);
+
+    try {
+      await signOut(auth);
+        
+      setTimeout(() => {
+        setUserInfo({} as UserInfo);
+
+        onChangePage('login');
+
+        setLoading(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Error signing out:", error);
+    }
+  }
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="fixed">
         <Toolbar>
-          <Drawer onChangePage={onChangePage} />
+          {(!!Object.keys(userInfo).length && <Drawer onChangePage={onChangePage} />)}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             FIAP Farms
           </Typography>
-          <IconButton
+          {(!!Object.keys(userInfo).length && <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="logout"
+            onClick={handleSignout}
+            loading={loading}
+            loadingIndicator={<CircularProgress  style={{color: 'white'}} size={16} />}
           >
             <LogoutIcon />
-          </IconButton>
+          </IconButton>)}
         </Toolbar>
       </AppBar>
     </Box>

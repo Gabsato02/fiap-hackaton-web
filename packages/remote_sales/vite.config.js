@@ -9,10 +9,7 @@ export default defineConfig({
 			name: 'remote_sales',
 			filename: 'remoteEntry.js',
 			exposes: {
-				'./Sales': './src/Sales',
-			},
-			remotes: {
-				hostApp: 'http://localhost:5000/assets/remoteEntry.js',
+				'./Sales': './src/presentation/views/Sales',
 			},
 			shared: ['react', 'react-dom'],
 		}),

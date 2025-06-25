@@ -3,13 +3,17 @@ import react from '@vitejs/plugin-react';
 import federation from '@originjs/vite-plugin-federation';
 
 export default defineConfig({
+	base: 'http://localhost:5001/',
 	plugins: [
 		react(),
 		federation({
 			name: 'remote_login',
 			filename: 'remoteEntry.js',
 			exposes: {
-				'./Login': './src/Login',
+				'./Login': './src/presentation/views/Login',
+			},
+			remotes: {
+				hostApp: 'http://localhost:5000/assets/remoteEntry.js',
 			},
 			shared: ['react', 'react-dom'],
 		}),

@@ -1,8 +1,16 @@
 import { create } from 'zustand';
+import { UserInfo } from '../domain/entities';
 
-export const useUserStore = create((set) => ({
-  userInfo: {
-    name: 'Gabriel'
-  },
-  setUserInfo: () => set((state) => ({ userInfo: state.userInfo })),
+interface UserStore {
+  userInfo: UserInfo;
+  setUserInfo: (newInfo: UserInfo) => void;
+}
+
+export const useUserStore = create<UserStore>((set) => ({
+  userInfo: {} as UserInfo,
+  setUserInfo: (newInfo: UserInfo) => set(() => ({
+    userInfo: {
+      ...newInfo,
+    },
+  })),
 }))
