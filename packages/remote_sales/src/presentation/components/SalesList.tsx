@@ -2,8 +2,10 @@ import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import Typography from '@mui/material/Typography';
 import { SalesCard } from './SalesCard';
+import { SalesFilter } from './SalesFilter';
 
 export const SalesList = () => {
+
   return (
     <List
       sx={{ width: '100%', bgcolor: 'background.paper' }}
@@ -17,6 +19,7 @@ export const SalesList = () => {
         </ListSubheader>
       }
     >
+      <SalesFilter />
       <SalesCard />
     </List>
   )
