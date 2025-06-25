@@ -24,7 +24,7 @@ const firebaseConfig = {
 initializeApp(firebaseConfig);
 
 export default function Login() {
-  const { userInfo, setUserInfo } = useUserStore();
+  const { setUserInfo } = useUserStore();
 
   useEffect(() => {
     const auth = getAuth();
@@ -36,7 +36,7 @@ export default function Login() {
             token: firebaseUser.accessToken,
             email: firebaseUser.email,
             name: firebaseUser.displayName,
-            photoURL: firebaseUser.photoURL,
+            photo_url: firebaseUser.photoURL,
             id: firebaseUser.uid,
           };
 
@@ -61,7 +61,7 @@ export default function Login() {
             token: user.accessToken,
             email: user.email,
             name: user.displayName,
-            photoURL: user.photoURL,
+            photo_url: user.photoURL,
             id: user.uid,
           };
 
@@ -82,7 +82,6 @@ export default function Login() {
 
   return (
     <Grid container spacing={2}>
-      {userInfo.name}
       <Card sx={{
           width: '100%',
           height: '600px',

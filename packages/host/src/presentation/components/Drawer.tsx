@@ -54,7 +54,7 @@ export default function MainDrawer({ onChangePage }: MainAppBarProps) {
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
         <ListItem sx={{ paddingY: 2, gap: 2 }}>
-          <Avatar alt={userInfo.name} src={userInfo.photoURL} />
+          <Avatar alt={userInfo.name} src={userInfo.photo_url} />
           <ListItemText primary={userInfo.name} />
         </ListItem>
         <Divider sx={{ marginBottom: 2 }} />

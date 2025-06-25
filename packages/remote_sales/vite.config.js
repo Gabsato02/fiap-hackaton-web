@@ -11,6 +11,9 @@ export default defineConfig({
 			exposes: {
 				'./Sales': './src/presentation/views/Sales',
 			},
+			remotes: {
+				hostApp: 'http://localhost:5000/assets/remoteEntry.js',
+			},
 			shared: ['react', 'react-dom'],
 		}),
 		{

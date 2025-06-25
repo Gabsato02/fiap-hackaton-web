@@ -5,6 +5,7 @@ import Stock from 'remoteStock/Stock';
 import Goals from 'remoteGoals/Goals';
 import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
 import AppBar from '../components/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import { useUserStore } from '../../store';
@@ -33,13 +34,13 @@ export default function App() {
   };
 
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+    <Container maxWidth="xl" sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
       <CssBaseline />
       <AppBar onChangePage={setSelectedPage} />
       <Box component="main" sx={{ flexGrow: 1, p: 3, width: '100%' }}>
         <Toolbar />
         {renderPage()}
       </Box>
-    </Box>
+    </Container>
   );
 }

@@ -9,6 +9,8 @@ export default defineConfig({
 			name: 'app',
 			exposes: {
 				'./store': './src/store/index.ts',
+				'./types': './src/domain/entities/index.ts',
+				'./global_components': './src/presentation/global_components/index.ts',
 			},
 			remotes: {
 				remoteLogin: 'http://localhost:5001/assets/remoteEntry.js',
@@ -16,7 +18,14 @@ export default defineConfig({
 				remoteStock: 'http://localhost:5003/assets/remoteEntry.js',
 				remoteGoals: 'http://localhost:5004/assets/remoteEntry.js',
 			},
-			shared: ['react', 'react-dom'],
+			shared: [
+				'react',
+				'react-dom',
+				'@mui/material',
+				'@emotion/react',
+				'@emotion/styled',
+				'zustand',
+			],
 		}),
 		{
 			name: 'vite-plugin-reload-endpoint',
