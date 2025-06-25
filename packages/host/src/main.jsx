@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import App from './presentation/views/App.jsx'
+import App from './presentation/layout/App.jsx'
 import CssBaseline from '@mui/material/CssBaseline';
 import { initializeApp } from 'firebase/app';
 
