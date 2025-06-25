@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect }from 'react';
 import Login from 'remoteLogin/Login';
 import Sales from 'remoteSales/Sales';
 import Stock from 'remoteStock/Stock';
@@ -18,9 +18,9 @@ const PAGES = {
 
 export default function App() {
   const { userInfo } = useUserStore();
-  const [selectedPage, setSelectedPage] = React.useState('sales');
+  const [selectedPage, setSelectedPage] = useState('sales');
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!userInfo.name) {
       setSelectedPage('login');
     } else {

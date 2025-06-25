@@ -54,7 +54,7 @@ export default function Login() {
 
     const uiConfig = {
       callbacks: {
-        signInSuccessWithAuthResult: function(authResult, redirectUrl) {
+        signInSuccessWithAuthResult: function(authResult) {
           const { user } = authResult;
 
           const userData = {

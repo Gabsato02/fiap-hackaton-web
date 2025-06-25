@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -13,7 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 export default function MainAppBar({ onChangePage }: MainAppBarProps) {
   const { userInfo, setUserInfo } = useUserStore();
-  const [loading, setLoading] = React.useState(false);  
+  const [loading, setLoading] = useState(false);  
 
   const handleSignout = async () => {
     const auth = getAuth();

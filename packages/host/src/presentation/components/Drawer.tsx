@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Button from '@mui/material/Button';
@@ -21,7 +21,7 @@ import { useUserStore } from '../../store';
 import Avatar from '@mui/material/Avatar';
 
 export default function MainDrawer({ onChangePage }: MainAppBarProps) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const { userInfo } = useUserStore();  
 
   const toggleDrawer = (newOpen: boolean) => () => {
