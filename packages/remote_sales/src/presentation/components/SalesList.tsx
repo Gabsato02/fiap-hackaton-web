@@ -1,5 +1,4 @@
 import List from '@mui/material/List';
-import ListSubheader from '@mui/material/ListSubheader';
 import Typography from '@mui/material/Typography';
 import { SalesCard } from './SalesCard';
 import { SalesFilter } from './SalesFilter';
@@ -8,15 +7,13 @@ export const SalesList = () => {
 
   return (
     <List
-      sx={{ width: '100%', bgcolor: 'background.paper' }}
+      sx={{ width: '100%' }}
       component="nav"
       aria-labelledby="nested-list-subheader"
       subheader={
-        <ListSubheader component="div" id="nested-list-subheader" sx={{ mb: 3 }}>
-          <Typography variant="h5" gutterBottom>
-            Vendas
-          </Typography>
-        </ListSubheader>
+        <Typography sx={{ mb: 3 }} variant="h4">
+          Histórico de Vendas
+        </Typography>
       }
     >
       <SalesFilter />

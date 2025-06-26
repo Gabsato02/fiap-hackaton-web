@@ -22,6 +22,7 @@ export default defineConfig({
 				'react',
 				'react-dom',
 				'@mui/material',
+				'@mui/icons-material',
 				'@emotion/react',
 				'@emotion/styled',
 				'zustand',

@@ -3,26 +3,34 @@ import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import { SalesList } from '../components/SalesList';
 import SalesModal from '../components/SalesModal';
+import SalesChart from '../components/SalesChart';
 
 export const Sales = () => {
 	const [openSaleModal, setOpenSaleModal] = useState(false);
 
+	const sampleData = [
+		{ label: 'Vendas', value: 40, color: '#4caf50' },
+		{ label: 'Marketing', value: 35, color: '#2196f3' },
+		{ label: 'TI', value: 25 }, // cor aleatória
+	];
+
 	return (
 		<>
-			<Grid container spacing={2}>
+			<Grid container spacing={4}>
 				<Grid item size={8}>
 					<SalesList />
 				</Grid>
 				<Grid item size={4}>
 					<Button
 						size="large"
-						sx={{ width: "100%", alignItems: "center" }}
+						sx={{ width: "100%", alignItems: "center", mb: 3 }}
 						variant="contained"
-						color="success"
+						color="primary"
 						onClick={() => setOpenSaleModal(true)}
 					>
 						Adicionar venda
 					</Button>
+					<SalesChart data={sampleData} title="Vendas por produto" />
 				</Grid>
 			</Grid>
 			<SalesModal

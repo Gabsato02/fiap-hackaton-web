@@ -16,11 +16,11 @@ export const SalesCard = () => {
 
   return (
     <>
-      <Card variant="outlined" sx={{ mb: 2 }}>
-        <CardContent>
+      <Card sx={{ mb: 2 }}>
+        <CardContent sx={{ px: 3, py: 2 }}>
           <Grid container spacing={2}>
             <Grid size={6}>
-              <Typography gutterBottom variant="h6">
+              <Typography gutterBottom variant="h6" color="primary">
                 Produto
               </Typography>
             </Grid>
@@ -36,7 +36,7 @@ export const SalesCard = () => {
           </Grid>
         </CardContent>
         <CardActions sx={{ justifyContent: "flex-end"}}>
-          <Button color="info" variant="contained" size="small">Editar</Button>
+          <Button color="secondary" variant="contained" size="small">Editar</Button>
           <Button color="error" size="small" onClick={() => setOpenDialog(true)}>Excluir</Button>
         </CardActions>
       </Card>

@@ -11,7 +11,17 @@ export default defineConfig({
 			exposes: {
 				'./Stock': './src/presentation/views/Stock',
 			},
-			shared: ['react', 'react-dom'],
+			remotes: {
+				hostApp: 'http://localhost:5000/assets/remoteEntry.js',
+			},
+			shared: [
+				'react',
+				'react-dom',
+				'@mui/material',
+				'@mui/icons-material',
+				'@emotion/react',
+				'@emotion/styled',
+			],
 		}),
 		{
 			name: 'vite-plugin-notify-host-on-rebuild',

@@ -20,7 +20,7 @@ import { MainAppBarProps, RemoteProjects } from '../../domain/entities';
 import { useUserStore } from '../../store';
 import Avatar from '@mui/material/Avatar';
 
-export default function MainDrawer({ onChangePage }: MainAppBarProps) {
+export default function MainDrawer({ onChangePage, selectedPage }: MainAppBarProps) {
   const [open, setOpen] = useState(false);
   const { userInfo } = useUserStore();  
 
@@ -60,7 +60,7 @@ export default function MainDrawer({ onChangePage }: MainAppBarProps) {
         <Divider sx={{ marginBottom: 2 }} />
         {DRAWER_LIST.map(({ text, icon, route }) => (
           <ListItem key={route} disablePadding onClick={() => handleItemClick(route)}  >
-            <ListItemButton>
+            <ListItemButton selected={selectedPage === route}>
               <ListItemIcon>
                 {icon}
               </ListItemIcon>

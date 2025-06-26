@@ -12,7 +12,7 @@ import { MainAppBarProps, UserInfo } from '../../domain/entities';
 import { useUserStore } from '../../store';
 import { ConfirmDialog } from '../global_components/index.ts';
 
-export default function MainAppBar({ onChangePage }: MainAppBarProps) {
+export default function MainAppBar({ onChangePage, selectedPage }: MainAppBarProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const { userInfo, setUserInfo } = useUserStore();
   const [loading, setLoading] = useState(false);  
@@ -41,7 +41,7 @@ export default function MainAppBar({ onChangePage }: MainAppBarProps) {
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="fixed">
           <Toolbar>
-            {(!!Object.keys(userInfo).length && <Drawer onChangePage={onChangePage} />)}
+            {(!!Object.keys(userInfo).length && <Drawer onChangePage={onChangePage} selectedPage={selectedPage} />)}
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               FIAP Farms
             </Typography>
@@ -52,7 +52,7 @@ export default function MainAppBar({ onChangePage }: MainAppBarProps) {
               aria-label="logout"
               onClick={() => setOpenDialog(true)}
               loading={loading}
-              loadingIndicator={<CircularProgress  style={{color: 'white'}} size={16} />}
+              loadingIndicator={<CircularProgress style={{color: 'white'}} size={16} />}
             >
               <LogoutIcon />
             </IconButton>)}

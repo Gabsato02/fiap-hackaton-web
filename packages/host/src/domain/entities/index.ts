@@ -3,6 +3,7 @@ import { Dispatch, ReactNode, SetStateAction } from 'react';
 // COMPONENTS PROPS
 export type MainAppBarProps = {
   onChangePage: Dispatch<SetStateAction<string>>;
+  selectedPage: 'sales' | 'login' | 'stock' | 'goals';
 };
 
 export type ConfirmDialogProps = {
