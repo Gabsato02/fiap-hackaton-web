@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState } from 'react';
 import { getAuth, signOut } from 'firebase/auth';
 import AppBar from '@mui/material/AppBar';

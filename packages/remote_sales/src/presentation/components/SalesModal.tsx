@@ -15,7 +15,6 @@ import { SaleModalProps } from '../../domain/entities';
 export default function SalesModal({
   open,
   onClose,
-  onSave,
   products,
   currentSale,
 }: SaleModalProps) {

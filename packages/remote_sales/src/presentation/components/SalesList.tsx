@@ -1,3 +1,4 @@
+import React from 'react';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import { SalesCard } from './SalesCard';

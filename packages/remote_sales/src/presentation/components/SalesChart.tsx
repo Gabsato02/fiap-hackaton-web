@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import { useTheme } from '@mui/material/styles';
-import { Box, Card, Typography } from '@mui/material';
+import { Card, Typography } from '@mui/material';
 
 export interface SalesChartData {
   label: string;

@@ -1,4 +1,4 @@
-import { StrictMode } from 'react';
+import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import 'firebaseui/dist/firebaseui.css';
 import Login from './presentation/views/Login';

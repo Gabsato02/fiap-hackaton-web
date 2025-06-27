@@ -27,7 +27,7 @@ export default function ConfirmDialog({
       setLoading(true);
       setError(null);
       await onConfirm();
-    } catch (err: any) {
+    } catch (err) {
       setError(err?.message || 'Ocorreu um erro ao confirmar.');
       return;
     } finally {

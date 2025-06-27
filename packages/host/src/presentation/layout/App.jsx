@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import Login from 'remoteLogin/Login';
 import Sales from 'remoteSales/Sales';
