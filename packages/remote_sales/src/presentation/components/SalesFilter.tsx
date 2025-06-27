@@ -18,14 +18,14 @@ export const SalesFilter = () => {
     {
       value: 'total_price',
       label: 'Valor',
-    }
+    },
   ];
 
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
-    stringify: (option: { label: string, value: string }) => option.label,
+    stringify: (option: { label: string; value: string }) => option.label,
   });
-  
+
   return (
     <Autocomplete
       options={FILTERS}

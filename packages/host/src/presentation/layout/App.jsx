@@ -1,4 +1,4 @@
-import { useState, useEffect }from 'react';
+import { useState, useEffect } from 'react';
 import Login from 'remoteLogin/Login';
 import Sales from 'remoteSales/Sales';
 import Stock from 'remoteStock/Stock';
@@ -36,13 +36,16 @@ export default function App() {
   };
 
   return (
-    <Container maxWidth="xl" sx={{ 
-      height: "100%", 
-      bgcolor: theme.palette.background.default, 
-      display: 'flex', 
-      justifyContent: 'center', 
-      width: '100%' 
-    }}>
+    <Container
+      maxWidth="xl"
+      sx={{
+        height: '100%',
+        bgcolor: theme.palette.background.default,
+        display: 'flex',
+        justifyContent: 'center',
+        width: '100%',
+      }}
+    >
       <CssBaseline />
       <AppBar onChangePage={setSelectedPage} selectedPage={selectedPage} />
       <Box component="main" sx={{ flexGrow: 1, p: 3, width: '100%' }}>

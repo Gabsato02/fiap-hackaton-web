@@ -22,7 +22,7 @@ import Avatar from '@mui/material/Avatar';
 
 export default function MainDrawer({ onChangePage, selectedPage }: MainAppBarProps) {
   const [open, setOpen] = useState(false);
-  const { userInfo } = useUserStore();  
+  const { userInfo } = useUserStore();
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
@@ -36,18 +36,18 @@ export default function MainDrawer({ onChangePage, selectedPage }: MainAppBarPro
     {
       route: 'sales',
       text: 'Vendas',
-      icon: <PointOfSaleIcon />
+      icon: <PointOfSaleIcon />,
     },
     {
       route: 'stock',
       text: 'Estoque',
-      icon: <InventoryIcon />
+      icon: <InventoryIcon />,
     },
     {
       route: 'goals',
       text: 'Metas',
-      icon: <FlagIcon />   
-    }
+      icon: <FlagIcon />,
+    },
   ];
 
   const DrawerList = (
@@ -59,11 +59,9 @@ export default function MainDrawer({ onChangePage, selectedPage }: MainAppBarPro
         </ListItem>
         <Divider sx={{ marginBottom: 2 }} />
         {DRAWER_LIST.map(({ text, icon, route }) => (
-          <ListItem key={route} disablePadding onClick={() => handleItemClick(route)}  >
+          <ListItem key={route} disablePadding onClick={() => handleItemClick(route)}>
             <ListItemButton selected={selectedPage === route}>
-              <ListItemIcon>
-                {icon}
-              </ListItemIcon>
+              <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>

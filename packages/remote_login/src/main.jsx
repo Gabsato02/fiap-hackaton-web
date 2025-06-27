@@ -6,5 +6,5 @@ import Login from './presentation/views/Login';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Login />
-  </StrictMode>
+  </StrictMode>,
 );

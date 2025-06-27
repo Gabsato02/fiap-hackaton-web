@@ -1,11 +1,11 @@
-import { useState } from "react";
-import Button from "@mui/material/Button";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import { ConfirmDialog } from "hostApp/global_components";
+import { useState } from 'react';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import { ConfirmDialog } from 'hostApp/global_components';
 
 export const SalesCard = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -25,19 +25,25 @@ export const SalesCard = () => {
               </Typography>
             </Grid>
             <Grid size={6}>
-              <Typography sx={{ color: 'text.secondary', textAlign: "right" }}>Data</Typography>
+              <Typography sx={{ color: 'text.secondary', textAlign: 'right' }}>Data</Typography>
             </Grid>
             <Grid size={6}>
-              <Typography variant="overline" sx={{ color: 'text.secondary' }}>Quantidade vendida</Typography>
+              <Typography variant="overline" sx={{ color: 'text.secondary' }}>
+                Quantidade vendida
+              </Typography>
             </Grid>
             <Grid size={6}>
-              <Typography sx={{ color: 'text.secondary', textAlign: "right" }}>Valor</Typography>
+              <Typography sx={{ color: 'text.secondary', textAlign: 'right' }}>Valor</Typography>
             </Grid>
           </Grid>
         </CardContent>
-        <CardActions sx={{ justifyContent: "flex-end"}}>
-          <Button color="secondary" variant="contained" size="small">Editar</Button>
-          <Button color="error" size="small" onClick={() => setOpenDialog(true)}>Excluir</Button>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
+          <Button color="secondary" variant="contained" size="small">
+            Editar
+          </Button>
+          <Button color="error" size="small" onClick={() => setOpenDialog(true)}>
+            Excluir
+          </Button>
         </CardActions>
       </Card>
       <ConfirmDialog

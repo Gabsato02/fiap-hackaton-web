@@ -1,4 +1,4 @@
-import { Sale, StockProduct } from "hostApp/types";
+import { Sale, StockProduct } from 'hostApp/types';
 
 export type SaleModalProps = {
   open: boolean;

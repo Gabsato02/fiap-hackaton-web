@@ -16,12 +16,7 @@ interface SalesChartProps {
   height?: number;
 }
 
-const SalesChart: React.FC<SalesChartProps> = ({
-  data,
-  title,
-  width = 400,
-  height = 400,
-}) => {
+const SalesChart: React.FC<SalesChartProps> = ({ data, title, width = 400, height = 400 }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
   const theme = useTheme();

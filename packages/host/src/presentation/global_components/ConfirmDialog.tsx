@@ -53,9 +53,7 @@ export default function ConfirmDialog({
     >
       <DialogTitle id="confirm-dialog-title">{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText id="confirm-dialog-description">
-          {message}
-        </DialogContentText>
+        <DialogContentText id="confirm-dialog-description">{message}</DialogContentText>
 
         {error && (
           <Alert severity="error" sx={{ mt: 2 }}>
@@ -67,7 +65,13 @@ export default function ConfirmDialog({
         <Button onClick={handleCancelClick} color="inherit" disabled={loading}>
           {cancelText}
         </Button>
-        <Button loading={loading} onClick={handleConfirmClick} color="primary" variant="contained" autoFocus>
+        <Button
+          loading={loading}
+          onClick={handleConfirmClick}
+          color="primary"
+          variant="contained"
+          autoFocus
+        >
           {confirmText}
         </Button>
       </DialogActions>

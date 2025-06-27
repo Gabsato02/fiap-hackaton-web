@@ -25,18 +25,12 @@ export default function SalesModal({
 
   const selectedProduct = useMemo(
     () => products.find((p) => p.id === productId),
-    [productId, products]
+    [productId, products],
   );
 
-  const unitPrice = useMemo(
-    () => (selectedProduct?.price || 0).toFixed(2),
-    [selectedProduct]
-  );
+  const unitPrice = useMemo(() => (selectedProduct?.price || 0).toFixed(2), [selectedProduct]);
 
-  const totalPrice = useMemo(
-    () => (unitPrice * quantity).toFixed(2),
-    [unitPrice, quantity]
-  );
+  const totalPrice = useMemo(() => (unitPrice * quantity).toFixed(2), [unitPrice, quantity]);
 
   useEffect(() => {
     if (currentSale) {
@@ -53,14 +47,13 @@ export default function SalesModal({
   const handleSave = () => {};
 
   return (
-    <Dialog
-      open={open}
-      onClose={onClose}
-    >
-      <DialogTitle>{currentSale ? `Editar Venda - #${currentSale.id}` : 'Adicionar Venda'}</DialogTitle>
+    <Dialog open={open} onClose={onClose}>
+      <DialogTitle>
+        {currentSale ? `Editar Venda - #${currentSale.id}` : 'Adicionar Venda'}
+      </DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
-          <Grid size={12} sx={{ pt: 1}}>
+          <Grid size={12} sx={{ pt: 1 }}>
             <FormControl fullWidth>
               <InputLabel id="product-select-label">Produto</InputLabel>
               <Select
@@ -99,21 +92,11 @@ export default function SalesModal({
           </Grid>
 
           <Grid size={6}>
-            <TextField
-              label="Valor unitário (R$)"
-              fullWidth
-              value={unitPrice}
-              disabled
-            />
+            <TextField label="Valor unitário (R$)" fullWidth value={unitPrice} disabled />
           </Grid>
 
           <Grid size={6}>
-            <TextField
-              label="Valor total (R$)"
-              fullWidth
-              value={totalPrice}
-              disabled
-            />
+            <TextField label="Valor total (R$)" fullWidth value={totalPrice} disabled />
           </Grid>
         </Grid>
       </DialogContent>
@@ -122,11 +105,7 @@ export default function SalesModal({
         <Button onClick={onClose} color="inherit">
           Cancelar
         </Button>
-        <Button
-          onClick={handleSave}
-          variant="contained"
-          color="success"
-        >
+        <Button onClick={handleSave} variant="contained" color="success">
           Salvar
         </Button>
       </DialogActions>

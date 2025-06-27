@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getAuth, signOut } from "firebase/auth";
+import { getAuth, signOut } from 'firebase/auth';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,7 +15,7 @@ import { ConfirmDialog } from '../global_components/index.ts';
 export default function MainAppBar({ onChangePage, selectedPage }: MainAppBarProps) {
   const [openDialog, setOpenDialog] = useState(false);
   const { userInfo, setUserInfo } = useUserStore();
-  const [loading, setLoading] = useState(false);  
+  const [loading, setLoading] = useState(false);
 
   const handleSignout = async () => {
     const auth = getAuth();
@@ -23,7 +23,7 @@ export default function MainAppBar({ onChangePage, selectedPage }: MainAppBarPro
 
     try {
       await signOut(auth);
-        
+
       setTimeout(() => {
         setUserInfo({} as UserInfo);
 
@@ -32,30 +32,34 @@ export default function MainAppBar({ onChangePage, selectedPage }: MainAppBarPro
         setLoading(false);
       }, 1000);
     } catch (error) {
-      console.error("Error signing out:", error);
+      console.error('Error signing out:', error);
     }
-  }
+  };
 
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="fixed">
           <Toolbar>
-            {(!!Object.keys(userInfo).length && <Drawer onChangePage={onChangePage} selectedPage={selectedPage} />)}
+            {!!Object.keys(userInfo).length && (
+              <Drawer onChangePage={onChangePage} selectedPage={selectedPage} />
+            )}
             <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
               FIAP Farms
             </Typography>
-            {(!!Object.keys(userInfo).length && <IconButton
-              size="large"
-              edge="start"
-              color="inherit"
-              aria-label="logout"
-              onClick={() => setOpenDialog(true)}
-              loading={loading}
-              loadingIndicator={<CircularProgress style={{color: 'white'}} size={16} />}
-            >
-              <LogoutIcon />
-            </IconButton>)}
+            {!!Object.keys(userInfo).length && (
+              <IconButton
+                size="large"
+                edge="start"
+                color="inherit"
+                aria-label="logout"
+                onClick={() => setOpenDialog(true)}
+                loading={loading}
+                loadingIndicator={<CircularProgress style={{ color: 'white' }} size={16} />}
+              >
+                <LogoutIcon />
+              </IconButton>
+            )}
           </Toolbar>
         </AppBar>
       </Box>

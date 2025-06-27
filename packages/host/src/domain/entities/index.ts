@@ -18,17 +18,17 @@ export type ConfirmDialogProps = {
 
 // DATA TYPES
 export type RemoteProjects = {
-  route: string,
-  text: string,
-  icon: ReactNode,
+  route: string;
+  text: string;
+  icon: ReactNode;
 };
 
 export type UserInfo = {
-  id: string,
-  token: string,
-  email: string,
-  name: string,
-  photo_url: string,
+  id: string;
+  token: string;
+  email: string;
+  name: string;
+  photo_url: string;
 };
 
 export type StockProduct = {

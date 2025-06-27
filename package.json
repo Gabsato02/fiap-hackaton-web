@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "pnpm -r run build",
-    "format": "prettier --write \"src/**/*.{js,jsx}\"",
-    "lint": "eslint \"src/**/*.{js,jsx}\" --quiet"
+    "format": "prettier --write \"packages/*/src/**/*.{js,jsx,ts,tsx}\"",
+    "lint": "eslint \"packages/*/src/**/*.{js,jsx,ts,tsx}\" --quiet"
   },
   "keywords": [],
   "author": "",

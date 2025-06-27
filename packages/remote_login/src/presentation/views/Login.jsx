@@ -1,24 +1,19 @@
 import { useEffect } from 'react';
 import * as firebaseui from 'firebaseui';
-import { 
-  getAuth, 
-  GoogleAuthProvider, 
-  EmailAuthProvider, 
-  onAuthStateChanged
-} from 'firebase/auth';
-import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider, EmailAuthProvider, onAuthStateChanged } from 'firebase/auth';
+import { initializeApp } from 'firebase/app';
 import Grid from '@mui/material/Grid';
 import coverImage from '../assets/cover-image.png';
 import Card from '@mui/material/Card';
-import { useUserStore } from "hostApp/store";
+import { useUserStore } from 'hostApp/store';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA73aVkVYsp3JD7jOs_Yylimq4vY9IxvEo",
-  authDomain: "fiap-m05-hackaton.firebaseapp.com",
-  projectId: "fiap-m05-hackaton",
-  storageBucket: "fiap-m05-hackaton.firebasestorage.app",
-  messagingSenderId: "401659988517",
-  appId: "1:401659988517:web:fe278a599fd1aaadad8dcc"
+  apiKey: 'AIzaSyA73aVkVYsp3JD7jOs_Yylimq4vY9IxvEo',
+  authDomain: 'fiap-m05-hackaton.firebaseapp.com',
+  projectId: 'fiap-m05-hackaton',
+  storageBucket: 'fiap-m05-hackaton.firebasestorage.app',
+  messagingSenderId: '401659988517',
+  appId: '1:401659988517:web:fe278a599fd1aaadad8dcc',
 };
 
 initializeApp(firebaseConfig);
@@ -45,7 +40,7 @@ export default function Login() {
           setUserInfo({});
         }
         unsubscribe();
-      })
+      });
     };
 
     const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
@@ -54,7 +49,7 @@ export default function Login() {
 
     const uiConfig = {
       callbacks: {
-        signInSuccessWithAuthResult: function(authResult) {
+        signInSuccessWithAuthResult: function (authResult) {
           const { user } = authResult;
 
           const userData = {
@@ -65,15 +60,12 @@ export default function Login() {
             id: user.uid,
           };
 
-          setUserInfo(userData)
+          setUserInfo(userData);
           return false;
         },
       },
       signInFlow: 'popup',
-      signInOptions: [
-        GoogleAuthProvider.PROVIDER_ID,
-        EmailAuthProvider.PROVIDER_ID,
-      ],
+      signInOptions: [GoogleAuthProvider.PROVIDER_ID, EmailAuthProvider.PROVIDER_ID],
     };
 
     ui.start('#firebaseui-auth-container', uiConfig);
@@ -82,7 +74,8 @@ export default function Login() {
 
   return (
     <Grid container spacing={2}>
-      <Card sx={{
+      <Card
+        sx={{
           width: '100%',
           height: '600px',
           position: 'relative',
@@ -91,21 +84,23 @@ export default function Login() {
           backgroundPosition: 'center',
         }}
       >
-        <Card sx={{
-          padding: 5,
-          height: '100%',
-          minWidth: '320px',
-          width: 'fit-content',
-          marginLeft: 'auto',
-          borderTopLeftRadius: 0,
-          borderBottomLeftRadius: 0,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          bgcolor: 'rgba(0, 0, 0, 0.3)',
-        }}>
-          <div id="firebaseui-auth-container"></div> 
-        </Card> 
+        <Card
+          sx={{
+            padding: 5,
+            height: '100%',
+            minWidth: '320px',
+            width: 'fit-content',
+            marginLeft: 'auto',
+            borderTopLeftRadius: 0,
+            borderBottomLeftRadius: 0,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            bgcolor: 'rgba(0, 0, 0, 0.3)',
+          }}
+        >
+          <div id="firebaseui-auth-container"></div>
+        </Card>
       </Card>
     </Grid>
   );

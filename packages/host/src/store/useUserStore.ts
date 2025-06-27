@@ -8,9 +8,10 @@ interface UserStore {
 
 export const useUserStore = create<UserStore>((set) => ({
   userInfo: {} as UserInfo,
-  setUserInfo: (newInfo: UserInfo) => set(() => ({
-    userInfo: {
-      ...newInfo,
-    },
-  })),
-}))
+  setUserInfo: (newInfo: UserInfo) =>
+    set(() => ({
+      userInfo: {
+        ...newInfo,
+      },
+    })),
+}));

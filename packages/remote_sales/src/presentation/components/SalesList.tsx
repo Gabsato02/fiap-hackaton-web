@@ -4,7 +4,6 @@ import { SalesCard } from './SalesCard';
 import { SalesFilter } from './SalesFilter';
 
 export const SalesList = () => {
-
   return (
     <List
       sx={{ width: '100%' }}
@@ -19,5 +18,5 @@ export const SalesList = () => {
       <SalesFilter />
       <SalesCard />
     </List>
-  )
-}
+  );
+};
