@@ -1,22 +1,10 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import { useTheme } from '@mui/material/styles';
-import { Card, Typography } from '@mui/material';
+import { Box, Card, CircularProgress, Typography } from '@mui/material';
+import { SalesChartProps } from '../../domain/entities';
 
-export interface SalesChartData {
-  label: string;
-  value: number;
-  color?: string;
-}
-
-interface SalesChartProps {
-  data: SalesChartData[];
-  title?: string;
-  width?: number;
-  height?: number;
-}
-
-const SalesChart: React.FC<SalesChartProps> = ({ data, title, width = 400, height = 400 }) => {
+const SalesChart: React.FC<SalesChartProps> = ({ data, title, width = 400, height = 400, loading }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const chartRef = useRef<Chart | null>(null);
   const theme = useTheme();
@@ -71,7 +59,11 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, title, width = 400, heigh
       <Typography align="center" component="span" variant="h5" sx={{ display: 'block', mb: 3 }}>
         {title}
       </Typography>
-      <canvas ref={canvasRef} width={width} height={height} />
+      { loading ? (<Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>) : <canvas ref={canvasRef} width={width} height={height} />
+      }
+      
     </Card>
   );
 };

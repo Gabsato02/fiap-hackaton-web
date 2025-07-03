@@ -1,10 +1,12 @@
 import React from 'react';
 import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 import { SalesCard } from './SalesCard';
 import { SalesFilter } from './SalesFilter';
 
-export const SalesList = () => {
+export const SalesList: React.FC<{ loading: boolean }> = ({ loading }) => {
   return (
     <List
       sx={{ width: '100%' }}
@@ -17,7 +19,14 @@ export const SalesList = () => {
       }
     >
       <SalesFilter />
-      <SalesCard />
+
+      {loading ? (
+        <Box display="flex" justifyContent="center" mt={4}>
+          <CircularProgress />
+        </Box>
+      ) : (
+        <SalesCard />
+      )}
     </List>
   );
 };

@@ -7,3 +7,17 @@ export type SaleModalProps = {
   products: StockProduct[];
   currentSale?: Sale;
 };
+
+export interface SalesChartData {
+  label: string;
+  value: number;
+  color?: string;
+}
+
+export interface SalesChartProps {
+  data: SalesChartData[];
+  title?: string;
+  width?: number;
+  height?: number;
+  loading: boolean;
+}

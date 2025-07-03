@@ -6,19 +6,20 @@ import SalesModal from '../components/SalesModal';
 import SalesChart from '../components/SalesChart';
 
 export const Sales = () => {
-  const [openSaleModal, setOpenSaleModal] = useState(false);
-
   const sampleData = [
     { label: 'Vendas', value: 40, color: '#4caf50' },
     { label: 'Marketing', value: 35, color: '#2196f3' },
-    { label: 'TI', value: 25 }, // cor aleatória
+    { label: 'TI', value: 25 },
   ];
+
+  const [openSaleModal, setOpenSaleModal] = useState(false);
+  const [loading] = useState(false);
 
   return (
     <>
       <Grid container spacing={4}>
         <Grid item size={8}>
-          <SalesList />
+          <SalesList loading={loading} />
         </Grid>
         <Grid item size={4}>
           <Button
@@ -30,7 +31,7 @@ export const Sales = () => {
           >
             Adicionar venda
           </Button>
-          <SalesChart data={sampleData} title="Vendas por produto" />
+          <SalesChart loading={loading} data={sampleData} title="Vendas por produto" />
         </Grid>
       </Grid>
       <SalesModal
