@@ -59,7 +59,7 @@ cd packages
 
 ### 2. Construir e Executar os Serviços
 
-Para desenvolvimento, executar na raiz `pnpm install` e depois `pnpm run build`. O, se quiser executar individualmente, executar `pnpm run build` na pasta do microfrontend.
+Para desenvolvimento, executar na raiz `pnpm install` e depois `pnpm run build`. Ou, se quiser executar individualmente, executar `pnpm run build` na pasta do microfrontend.
 
 ### 3. Verificar os Serviços
 
