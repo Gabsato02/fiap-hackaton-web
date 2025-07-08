@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -6,16 +6,10 @@ import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { ConfirmDialog } from 'hostApp/global_components';
-import { Sale } from 'hostApp/domain/entities';
-import { useProductsStore } from 'hostApp/store';
 import { SalesCardProps } from '../../domain/entities';
 
-export const SalesCard: React.FC<SalesCardProps> = ({ sale, onDelete }) => {
+export const SalesCard: React.FC<SalesCardProps> = ({ sale, onDelete, onEdit }) => {
   const [openDialog, setOpenDialog] = useState(false);
-
-  const { getProductById, stockProducts } =  useProductsStore();
-
-  const product = useMemo(() => getProductById(sale.product_id), [stockProducts]) ;
 
   return (
     <>
@@ -24,7 +18,7 @@ export const SalesCard: React.FC<SalesCardProps> = ({ sale, onDelete }) => {
           <Grid container spacing={2}>
             <Grid size={6}>
               <Typography gutterBottom variant="h6" color="primary">
-                { product?.name || 'Produto' }
+                { sale.product_name }
               </Typography>
             </Grid>
             <Grid size={6}>
@@ -45,7 +39,7 @@ export const SalesCard: React.FC<SalesCardProps> = ({ sale, onDelete }) => {
           </Grid>
         </CardContent>
         <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button color="secondary" variant="contained" size="small">
+          <Button color="secondary" variant="contained" size="small" onClick={() => onEdit(sale)}>
             Editar
           </Button>
           <Button color="error" size="small" onClick={() => setOpenDialog(true)}>

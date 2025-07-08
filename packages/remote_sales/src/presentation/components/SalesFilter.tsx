@@ -1,30 +1,21 @@
 import React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+import { FilterOption } from '../../domain/entities';
 
-export const SalesFilter = () => {
-  const FILTERS = [
-    {
-      value: 'name',
-      label: 'Nome',
-    },
-    {
-      value: 'product_quantity',
-      label: 'Quantidade',
-    },
-    {
-      value: 'date',
-      label: 'Data',
-    },
-    {
-      value: 'total_price',
-      label: 'Valor',
-    },
+export const SalesFilter = ({ onFilterChange }: {
+  onFilterChange: (filterValue: string) => void;
+}) => {
+  const FILTERS: FilterOption[] = [
+    { value: 'product_name', label: 'Nome' },
+    { value: 'product_quantity', label: 'Quantidade' },
+    { value: 'date', label: 'Data' },
+    { value: 'total_price', label: 'Valor' },
   ];
 
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
-    stringify: (option: { label: string; value: string }) => option.label,
+    stringify: (option: FilterOption) => option.label,
   });
 
   return (
@@ -33,7 +24,14 @@ export const SalesFilter = () => {
       getOptionLabel={(option) => option.label}
       filterOptions={filterOptions}
       sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Ordenar por" sx={{ mb: 3 }} />}
+      onChange={(_, newValue) => {
+        if (newValue) {
+          onFilterChange(newValue.value);
+        }
+      }}
+      renderInput={(params) => (
+        <TextField {...params} label="Ordenar por" />
+      )}
     />
   );
 };

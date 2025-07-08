@@ -9,24 +9,42 @@ import { Sale, Product } from 'hostApp/domain/entities';
 import { initializeApp } from 'firebase/app';
 import { addDoc, collection, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore';
 import { useProductsStore } from 'hostApp/store';
+import dayjs from 'dayjs';
+import { GroupedSale } from '../../domain/entities';
 
 const app = initializeApp(FIREBASE_CONFIG);
 
 const db = getFirestore(app);
 
 export const Sales = () => {
-  const sampleData = [
-    { label: 'Vendas', value: 40, color: '#4caf50' },
-    { label: 'Marketing', value: 35, color: '#2196f3' },
-    { label: 'TI', value: 25 },
-  ];
-
   const { setStockProducts, getProductById } =  useProductsStore();
 
+  const [groupedSales, setGroupedSales] = useState<Array<GroupedSale>>([]);
   const [openSaleModal, setOpenSaleModal] = useState(false);
+  const [selectedSale, setSelectedSale] = useState<Sale | null>(null);
   const [sales, setSales] = useState<Array<Sale>>([]);
   const [products, setProducts] = useState<Array<Product>>([]);
   const [loading, setLoading] = useState(false);
+
+  const groupSalesByProduct = (sales: Sale[]): GroupedSale[] => {
+    const result: GroupedSale[] = [];
+  
+    for (const sale of sales) {
+      const total = sale.total_price;
+      const existing = result.find(item => item.label === sale.product_name);
+  
+      if (existing) {
+        existing.value += total;
+      } else {
+        result.push({
+          label: sale.product_name,
+          value: total,
+        });
+      }
+    }
+  
+    return result;
+  }
 
   const fetchProducts = async () => {
     const resp = await getDocs(collection(db, "stock_products"));
@@ -40,8 +58,23 @@ export const Sales = () => {
     setLoading(false);
   };
 
+  const handleEditSale = (sale: Sale) => {
+    const $sale = sale;
+    $sale.date = dayjs(sale.date).tz('America/Sao_Paulo');
+    setSelectedSale($sale);
+    setOpenSaleModal(true);
+  }
+
   const handleSaveSale = async (sale: Sale) => {
-    await addDoc(collection(db, "sales"), sale);
+    const payload = sale;
+
+    if (!payload.sale_id) {
+      delete payload.sale_id;
+      await addDoc(collection(db, "sales"), sale);
+    } else {
+      await setDoc(doc(db, "sales", sale.sale_id), payload, { merge: true });
+      setSelectedSale(null);
+    }
 
     const product = getProductById(sale.product_id);
 
@@ -61,12 +94,25 @@ export const Sales = () => {
   useEffect(() => {
     if (products.length) setStockProducts(products);
   }, [products]);
+
+  useEffect(() => {
+    if (sales.length) {
+      const grouped = groupSalesByProduct(sales);
+      setGroupedSales(grouped);
+    }
+  }, [sales]);
   
   return (
     <>
       <Grid container spacing={4}>
         <Grid size={8}>
-          <SalesList loading={loading} sales={sales} refreshList={fetchSales} database={db}  />
+          <SalesList 
+            loading={loading} 
+            sales={sales} 
+            refreshList={fetchSales} 
+            database={db}
+            editSale={handleEditSale}
+          />
         </Grid>
         <Grid size={4}>
           <Button
@@ -78,14 +124,14 @@ export const Sales = () => {
           >
             Adicionar venda
           </Button>
-          <SalesChart loading={loading} data={sampleData} title="Vendas por produto" />
+          <SalesChart loading={loading} data={groupedSales} title="Vendas por produto" />
         </Grid>
       </Grid>
       <SalesModal
         open={openSaleModal}
         onClose={() => setOpenSaleModal(false)}
         onSave={handleSaveSale}
-        products={products}
+        currentSale={selectedSale}
       ></SalesModal>
     </>
   );

@@ -45,6 +45,14 @@ const SalesChart: React.FC<SalesChartProps> = ({ data, title, width = 400, heigh
         plugins: {
           legend: { position: 'bottom' },
           title: undefined,
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const value = Number(context.raw) || 0;
+                return `R$ ${value.toFixed(2)}`;
+              },
+            }
+          }
         },
       },
     });

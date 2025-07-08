@@ -20,7 +20,6 @@ export default function Login() {
       const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
         if (firebaseUser) {
           const userData = {
-            token: firebaseUser.accessToken,
             email: firebaseUser.email,
             name: firebaseUser.displayName,
             photo_url: firebaseUser.photoURL,
@@ -36,8 +35,6 @@ export default function Login() {
     };
 
     const ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(auth);
-
-    ui.languageCode = 'pt-BR';
 
     const uiConfig = {
       callbacks: {

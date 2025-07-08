@@ -12,7 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { SaleModalProps } from '../../domain/entities';
 import { DateInput } from 'hostApp/global_components';
-import { useProductsStore } from 'hostApp/store';
+import { useProductsStore, useUserStore } from 'hostApp/store';
 import { Product } from 'hostApp/domain/entities';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -29,6 +29,7 @@ export default function SalesModal({
   currentSale,
 }: SaleModalProps) {
   const { stockProducts } =  useProductsStore();
+  const { userInfo } = useUserStore();
   
   const [productId, setProductId] = useState('');
   const [quantity, setQuantity] = useState(1);
@@ -40,14 +41,17 @@ export default function SalesModal({
     [productId, stockProducts],
   );
 
-  const unitPrice = useMemo(() => (selectedProduct?.price || 0).toFixed(2), [selectedProduct]);
+  const unitPrice = useMemo(() => {
+    if (currentSale?.product_id === productId) return currentSale?.product_price?.toFixed(2);
+    return (selectedProduct?.price || 0).toFixed(2)
+  }, [selectedProduct]);
 
   const totalPrice = useMemo(() => (unitPrice * quantity).toFixed(2), [unitPrice, quantity]);
 
   useEffect(() => {
     if (currentSale) {
-      setProductId(currentSale.productId);
-      setQuantity(currentSale.quantity);
+      setProductId(currentSale.product_id);
+      setQuantity(currentSale.product_quantity);
       setDate(currentSale.date);
     } else {
       setProductId('');
@@ -60,13 +64,18 @@ export default function SalesModal({
     setLoading(true);
  
     try {
-      await onSave({
+      const payload = {
         product_id: productId,
+        product_name: selectedProduct?.name || '',
         product_quantity: quantity,
         product_price: parseFloat(unitPrice),
         date: date.toISOString(),
         total_price: parseFloat(totalPrice),
-      })
+        seller_id: userInfo.id,
+        sale_id: currentSale ? currentSale.id : undefined,
+      };
+
+      await onSave(payload)
     } catch {} finally {
       setLoading(false);
       onClose();
@@ -128,7 +137,7 @@ export default function SalesModal({
         <Button onClick={onClose} color="inherit">
           Cancelar
         </Button>
-        <Button onClick={handleSave} variant="contained" color="success" disabled={!productId}>
+        <Button onClick={handleSave} variant="contained" color="success" disabled={!productId} loading={loading}>
           Salvar
         </Button>
       </DialogActions>

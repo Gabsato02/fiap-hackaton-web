@@ -1,11 +1,10 @@
 import { Firestore } from 'firebase/firestore';
-import { Sale, StockProduct } from 'hostApp/types';
+import { Sale } from 'hostApp/types';
 
 export type SaleModalProps = {
   open: boolean;
   onClose: () => void;
   onSave: (sale: Sale) => void;
-  products: StockProduct[];
   currentSale?: Sale;
 };
 
@@ -27,10 +26,22 @@ export type SalesListProps = {
   loading: boolean;
   sales: Sale[];
   refreshList: () => void;
+  editSale: (sale: Sale) => void;
   database: Firestore;
 };
 
 export type SalesCardProps = {
   sale: Sale,
-  onDelete: () => void
+  onDelete: () => void;
+  onEdit: (sale: Sale) => void;
+};
+
+export type FilterOption = {
+  value: string;
+  label: string;
+};
+
+export type GroupedSale = {
+  label: string;
+  value: number;
 };
