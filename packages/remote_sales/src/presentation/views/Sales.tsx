@@ -7,7 +7,7 @@ import SalesChart from '../components/SalesChart';
 import { FIREBASE_CONFIG } from 'hostApp/vars';
 import { Sale, Product } from 'hostApp/domain/entities';
 import { initializeApp } from 'firebase/app';
-import { addDoc, collection, getDocs, getFirestore } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore';
 import { useProductsStore } from 'hostApp/store';
 
 const app = initializeApp(FIREBASE_CONFIG);
@@ -21,7 +21,7 @@ export const Sales = () => {
     { label: 'TI', value: 25 },
   ];
 
-  const { setStockProducts } =  useProductsStore();
+  const { setStockProducts, getProductById } =  useProductsStore();
 
   const [openSaleModal, setOpenSaleModal] = useState(false);
   const [sales, setSales] = useState<Array<Sale>>([]);
@@ -42,7 +42,15 @@ export const Sales = () => {
 
   const handleSaveSale = async (sale: Sale) => {
     await addDoc(collection(db, "sales"), sale);
+
+    const product = getProductById(sale.product_id);
+
+    await setDoc(doc(db, "stock_products", sale.product_id), {
+      quantity: product.quantity - sale.product_quantity,
+    }, { merge: true });
+  
     fetchSales();
+    fetchProducts();
   };
 
   useEffect(() => {
