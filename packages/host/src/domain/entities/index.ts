@@ -1,3 +1,4 @@
+import { Dayjs } from 'dayjs';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 // COMPONENTS PROPS
@@ -14,6 +15,12 @@ export type ConfirmDialogProps = {
   cancelText?: string;
   onConfirm: () => Promise<void> | void;
   onCancel: () => void;
+};
+
+export type CustomDatePickerProps = {
+  label: string;
+  value: Dayjs | null;
+  onChange: (date: Dayjs | null) => void;
 };
 
 // DATA TYPES

@@ -11,6 +11,7 @@ export default defineConfig({
 				'./store': './src/store/index.ts',
 				'./types': './src/domain/entities/index.ts',
 				'./global_components': './src/presentation/global_components/index.ts',
+				'./vars': './src/vars/index.ts',
 			},
 			remotes: {
 				remoteLogin: 'http://localhost:5001/assets/remoteEntry.js',

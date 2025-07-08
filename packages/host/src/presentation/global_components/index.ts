@@ -1,3 +1,4 @@
 import ConfirmDialog from './ConfirmDialog';
+import DateInput from './DateInput';
 
-export { ConfirmDialog };
+export { DateInput, ConfirmDialog };

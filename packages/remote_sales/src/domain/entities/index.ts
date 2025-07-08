@@ -1,3 +1,4 @@
+import { Firestore } from 'firebase/firestore';
 import { Sale, StockProduct } from 'hostApp/types';
 
 export type SaleModalProps = {
@@ -21,3 +22,15 @@ export interface SalesChartProps {
   height?: number;
   loading: boolean;
 }
+
+export type SalesListProps = {
+  loading: boolean;
+  sales: Sale[];
+  refreshList: () => void;
+  database: Firestore;
+};
+
+export type SalesCardProps = {
+  sale: Sale,
+  onDelete: () => void
+};

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -6,13 +6,16 @@ import CardContent from '@mui/material/CardContent';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { ConfirmDialog } from 'hostApp/global_components';
+import { Sale } from 'hostApp/domain/entities';
+import { useProductsStore } from 'hostApp/store';
+import { SalesCardProps } from '../../domain/entities';
 
-export const SalesCard = () => {
+export const SalesCard: React.FC<SalesCardProps> = ({ sale, onDelete }) => {
   const [openDialog, setOpenDialog] = useState(false);
 
-  const handleDeleteSale = () => {
-    setOpenDialog(false);
-  };
+  const { getProductById, stockProducts } =  useProductsStore();
+
+  const product = useMemo(() => getProductById(sale.product_id), [stockProducts]) ;
 
   return (
     <>
@@ -21,19 +24,23 @@ export const SalesCard = () => {
           <Grid container spacing={2}>
             <Grid size={6}>
               <Typography gutterBottom variant="h6" color="primary">
-                Produto
+                { product?.name || 'Produto' }
               </Typography>
             </Grid>
             <Grid size={6}>
-              <Typography sx={{ color: 'text.secondary', textAlign: 'right' }}>Data</Typography>
+              <Typography sx={{ color: 'text.secondary', textAlign: 'right' }}>
+                Data: {new Date(sale.date).toLocaleDateString('pt-BR')}
+              </Typography>
             </Grid>
             <Grid size={6}>
               <Typography variant="overline" sx={{ color: 'text.secondary' }}>
-                Quantidade vendida
+                Quantidade: {sale.product_quantity}
               </Typography>
             </Grid>
             <Grid size={6}>
-              <Typography sx={{ color: 'text.secondary', textAlign: 'right' }}>Valor</Typography>
+              <Typography sx={{ color: 'text.secondary', textAlign: 'right' }}>
+                Valor: R$ {Number(sale.total_price).toFixed(2)}
+              </Typography>
             </Grid>
           </Grid>
         </CardContent>
@@ -52,7 +59,7 @@ export const SalesCard = () => {
         message="Deseja realmente excluir esta venda? Esta ação não poderá ser desfeita."
         confirmText="Sim, excluir"
         cancelText="Cancelar"
-        onConfirm={handleDeleteSale}
+        onConfirm={onDelete}
         onCancel={() => setOpenDialog(false)}
       />
     </>
