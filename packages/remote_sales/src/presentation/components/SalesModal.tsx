@@ -128,7 +128,7 @@ export default function SalesModal({
         <Button onClick={onClose} color="inherit">
           Cancelar
         </Button>
-        <Button onClick={handleSave} variant="contained" color="success">
+        <Button onClick={handleSave} variant="contained" color="success" disabled={!productId}>
           Salvar
         </Button>
       </DialogActions>
