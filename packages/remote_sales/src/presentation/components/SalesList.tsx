@@ -4,14 +4,12 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
-import Stack from '@mui/material/Stack';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-
 import { SalesCard } from './SalesCard';
 import { SalesFilter } from './SalesFilter';
 import { SalesListProps } from '../../domain/entities';
-import { deleteDoc, doc } from 'firebase/firestore';
+import { deleteSale } from '../../infraestructure/repositories';
 
 export const SalesList: React.FC<SalesListProps> = ({ 
   loading, 
@@ -23,12 +21,10 @@ export const SalesList: React.FC<SalesListProps> = ({
   const [selectedFilter, setSelectedFilter] = useState<string>('date');
   const [sortAscending, setSortAscending] = useState<boolean>(false);
 
-  const toggleSortOrder = () => {
-    setSortAscending((prev) => !prev);
-  };
+  const toggleSortOrder = () => setSortAscending((prev) => !prev);
 
   const handleDeleteSale = async (id: string) => {
-    await deleteDoc(doc(database, "sales", id));
+    await deleteSale(database, id);
     refreshList();
   };
 

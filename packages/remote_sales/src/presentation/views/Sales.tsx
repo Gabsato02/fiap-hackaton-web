@@ -4,17 +4,12 @@ import Grid from '@mui/material/Grid';
 import { SalesList } from '../components/SalesList';
 import SalesModal from '../components/SalesModal';
 import SalesChart from '../components/SalesChart';
-import { FIREBASE_CONFIG } from 'hostApp/vars';
 import { Sale, Product } from 'hostApp/domain/entities';
-import { initializeApp } from 'firebase/app';
-import { addDoc, collection, doc, getDocs, getFirestore, query, setDoc, where } from 'firebase/firestore';
 import { useProductsStore, useUserStore } from 'hostApp/store';
 import dayjs from 'dayjs';
 import { GroupedSale } from '../../domain/entities';
-
-const app = initializeApp(FIREBASE_CONFIG);
-
-const db = getFirestore(app);
+import { db } from '../../infraestructure/database';
+import { editSale, getStockProducts, getUserSales, saveSale, updateProductQuantity } from '../../infraestructure/repositories';
 
 export const Sales = () => {
   const { setStockProducts, getProductById } =  useProductsStore();
@@ -48,16 +43,14 @@ export const Sales = () => {
   }
 
   const fetchProducts = async () => {
-    const q = query(collection(db, "stock_products"), where("quantity", ">", 0));
-    const resp = await getDocs(q);
+    const resp = await getStockProducts(db);
     setProducts(resp.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
   };
 
   const fetchSales = async () => {
     if (!userInfo?.id) return;
     setLoading(true);
-    const q = query(collection(db, "sales"), where("seller_id", "==", userInfo.id));
-    const resp = await getDocs(q);
+    const resp = await getUserSales(db, userInfo.id);
     setSales(resp.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     setLoading(false);
   };
@@ -74,18 +67,16 @@ export const Sales = () => {
 
     if (!payload.sale_id) {
       delete payload.sale_id;
-      await addDoc(collection(db, "sales"), sale);
+      await saveSale(db, payload);
     } else {
-      await setDoc(doc(db, "sales", sale.sale_id), payload, { merge: true });
+      await editSale(db, payload.sale_id, payload);
       setSelectedSale(null);
     }
 
     const product = getProductById(sale.product_id);
 
-    await setDoc(doc(db, "stock_products", sale.product_id), {
-      quantity: product.quantity - sale.product_quantity,
-    }, { merge: true });
-  
+    await updateProductQuantity(db, sale.product_id, product.quantity - sale.product_quantity);
+
     fetchSales();
     fetchProducts();
   };
