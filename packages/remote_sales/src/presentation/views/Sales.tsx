@@ -7,8 +7,8 @@ import SalesChart from '../components/SalesChart';
 import { FIREBASE_CONFIG } from 'hostApp/vars';
 import { Sale, Product } from 'hostApp/domain/entities';
 import { initializeApp } from 'firebase/app';
-import { addDoc, collection, doc, getDocs, getFirestore, setDoc } from 'firebase/firestore';
-import { useProductsStore } from 'hostApp/store';
+import { addDoc, collection, doc, getDocs, getFirestore, query, setDoc, where } from 'firebase/firestore';
+import { useProductsStore, useUserStore } from 'hostApp/store';
 import dayjs from 'dayjs';
 import { GroupedSale } from '../../domain/entities';
 
@@ -18,6 +18,7 @@ const db = getFirestore(app);
 
 export const Sales = () => {
   const { setStockProducts, getProductById } =  useProductsStore();
+  const { userInfo } = useUserStore();
 
   const [groupedSales, setGroupedSales] = useState<Array<GroupedSale>>([]);
   const [openSaleModal, setOpenSaleModal] = useState(false);
@@ -47,13 +48,16 @@ export const Sales = () => {
   }
 
   const fetchProducts = async () => {
-    const resp = await getDocs(collection(db, "stock_products"));
+    const q = query(collection(db, "stock_products"), where("quantity", ">", 0));
+    const resp = await getDocs(q);
     setProducts(resp.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
   };
 
   const fetchSales = async () => {
+    if (!userInfo?.id) return;
     setLoading(true);
-    const resp = await getDocs(collection(db, "sales"));
+    const q = query(collection(db, "sales"), where("seller_id", "==", userInfo.id));
+    const resp = await getDocs(q);
     setSales(resp.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     setLoading(false);
   };
