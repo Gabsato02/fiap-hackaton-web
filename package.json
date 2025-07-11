@@ -5,11 +5,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "pnpm -r run build",
-    "lint": "eslint \"{packages/*/src,src,scripts,config}/**/*.{js,jsx,ts,tsx}\" --quiet",
-    "lint:fix": "eslint \"{packages/*/src,src,scripts,config}/**/*.{js,jsx,ts,tsx}\" --fix",
-    "format": "prettier --write \"{packages/*/src,src,scripts,config}/**/*.{js,jsx,ts,tsx,css,md,json}\""
+    "install:deps": "pnpm install && pnpm -r install",
+    "postinstall:deps": "pnpm run build",
+    "dev": "pnpm -r dev",
+    "build": "pnpm -r build",
+    "preview": "pnpm -r preview"
   },
   "keywords": [],
   "author": "",
