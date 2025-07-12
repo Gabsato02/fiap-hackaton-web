@@ -7,9 +7,9 @@
   "scripts": {
     "install:deps": "pnpm install && pnpm -r install",
     "postinstall:deps": "pnpm run build",
-    "dev": "pnpm -r dev",
-    "build": "pnpm -r build",
-    "preview": "pnpm --stream --parallel -r preview"
+    "dev": "pnpm --parallel -r dev",
+    "build": "pnpm --parallel -r build",
+    "preview": "pnpm --parallel -r preview"
   },
   "keywords": [],
   "author": "",
