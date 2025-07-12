@@ -1,6 +1,14 @@
 import React, { useEffect } from 'react';
 import * as firebaseui from 'firebaseui';
-import { getAuth, GoogleAuthProvider, EmailAuthProvider, onAuthStateChanged } from 'firebase/auth';
+// ✅ 1. IMPORTE OS TIPOS 'Auth' E 'UserCredential'
+import {
+  getAuth,
+  GoogleAuthProvider,
+  EmailAuthProvider,
+  onAuthStateChanged,
+  Auth,
+  UserCredential,
+} from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
 import Grid from '@mui/material/Grid';
 import coverImage from '../assets/cover-image.png';
@@ -16,7 +24,8 @@ export default function Login() {
   useEffect(() => {
     const auth = getAuth();
 
-    const checkUserAuthentication = (auth) => {
+    // ✅ 2. ADICIONE O TIPO 'Auth' AO PARÂMETRO
+    const checkUserAuthentication = (auth: Auth) => {
       const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
         if (firebaseUser) {
           const userData = {
@@ -38,10 +47,12 @@ export default function Login() {
 
     const uiConfig = {
       callbacks: {
-        signInSuccessWithAuthResult: function (authResult) {
+        // ✅ 3. ADICIONE O TIPO 'UserCredential' AO PARÂMETRO
+        signInSuccessWithAuthResult: function (authResult: UserCredential) {
           const { user } = authResult;
 
           const userData = {
+            // @ts-ignore // A propriedade accessToken não existe no tipo User padrão, mas é injetada pelo provider. Ignoramos o erro de tipo aqui.
             token: user.accessToken,
             email: user.email,
             name: user.displayName,

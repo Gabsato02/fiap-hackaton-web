@@ -12,7 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import FlagIcon from '@mui/icons-material/Flag';
 import Divider from '@mui/material/Divider';
-import { MainAppBarProps, RemoteProjects } from '../../domain/entities';
+import { MainAppBarProps, PageName, RemoteProjects } from '../../domain/entities';
 import { useUserStore } from '../../store';
 import Avatar from '@mui/material/Avatar';
 
@@ -25,7 +25,7 @@ export default function MainDrawer({ onChangePage, selectedPage }: MainAppBarPro
   };
 
   const handleItemClick = (id: string) => {
-    onChangePage(id);
+    onChangePage(id as PageName);
   };
 
   const DRAWER_LIST: RemoteProjects[] = [

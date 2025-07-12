@@ -1,10 +1,15 @@
 import { Dayjs } from 'dayjs';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
+// ✅ 1. DEFINA O TIPO CENTRAL AQUI
+export type PageName = 'sales' | 'login' | 'stock' | 'goals';
+
 // COMPONENTS PROPS
 export type MainAppBarProps = {
-  onChangePage: Dispatch<SetStateAction<string>>;
-  selectedPage: 'sales' | 'login' | 'stock' | 'goals';
+  // ✅ 2. USE O TIPO "PAGENAME" AQUI
+  onChangePage: Dispatch<SetStateAction<PageName>>;
+  // ✅ 3. E AQUI TAMBÉM, PARA MANTER A CONSISTÊNCIA
+  selectedPage: PageName;
 };
 
 export type ConfirmDialogProps = {
