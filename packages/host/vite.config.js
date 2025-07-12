@@ -35,7 +35,6 @@ export default defineConfig({
         server.middlewares.use((req, res, next) => {
           if (req.url === '/__fullReload') {
             server.hot.send({ type: 'full-reload' });
-
             res.end('Full reload triggered');
           } else {
             next();
@@ -49,5 +48,9 @@ export default defineConfig({
     target: 'esnext',
     minify: false,
     cssCodeSplit: false,
+  },
+  preview: {
+    port: 5000, // A porta específica deste remote
+    host: true, // Garante que o servidor seja acessível na sua rede
   },
 });

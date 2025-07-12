@@ -31,9 +31,10 @@ export default defineConfig({
       async buildEnd(error) {
         if (!error) {
           try {
-            await fetch('http://localhost:5002/__fullReload');
+            // Aponte para a porta do HOST
+            await fetch('http://localhost:5000/__fullReload');
           } catch (e) {
-            console.log(e);
+            console.log('Could not notify host for reload', e);
           }
         }
       },
@@ -44,5 +45,9 @@ export default defineConfig({
     target: 'esnext',
     minify: false,
     cssCodeSplit: false,
+  },
+  preview: {
+    port: 5002, // A porta específica deste remote
+    host: true, // Garante que o servidor seja acessível na sua rede
   },
 });

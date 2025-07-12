@@ -4,8 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port 5002",
+    "dev": "concurrently \"npm:build:watch\" \"npm:serve\"",
     "build": "tsc && vite build",
+    "build:watch": "vite build --watch",
+    "serve": "vite preview",
     "preview": "npm run build && vite preview --host --port 5002"
   },
   "dependencies": {
