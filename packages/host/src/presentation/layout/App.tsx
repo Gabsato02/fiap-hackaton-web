@@ -19,10 +19,13 @@ const PAGES = {
   goals: <Goals />,
 };
 
+type PageName = keyof typeof PAGES; // Resulta em: "login" | "sales" | "stock" | "goals"
+
 export default function App() {
   const { userInfo } = useUserStore();
   const theme = useTheme();
-  const [selectedPage, setSelectedPage] = useState('sales');
+
+  const [selectedPage, setSelectedPage] = useState<PageName>('sales');
 
   useEffect(() => {
     if (!userInfo.name) {
@@ -33,6 +36,7 @@ export default function App() {
   }, [userInfo]);
 
   const renderPage = () => {
+    // Agora o TypeScript sabe que `selectedPage` é sempre uma chave válida de `PAGES`.
     return PAGES[selectedPage] || PAGES.sales;
   };
 
@@ -48,6 +52,7 @@ export default function App() {
       }}
     >
       <CssBaseline />
+      {/* O tipo de `selectedPage` agora corresponde perfeitamente à prop esperada. */}
       <AppBar onChangePage={setSelectedPage} selectedPage={selectedPage} />
       <Box component="main" sx={{ flexGrow: 1, p: 3, width: '100%' }}>
         <Toolbar />

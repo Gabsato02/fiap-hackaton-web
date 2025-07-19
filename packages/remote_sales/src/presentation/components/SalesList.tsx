@@ -8,17 +8,17 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { SalesCard } from './SalesCard';
 import { SalesFilter } from './SalesFilter';
-import { SalesListProps } from '../../domain/entities';
+import { Sale, SalesListProps } from '../../domain/entities';
 import { deleteSale } from '../../infraestructure/repositories';
 
-export const SalesList: React.FC<SalesListProps> = ({ 
-  loading, 
-  sales, 
-  refreshList, 
+export const SalesList: React.FC<SalesListProps> = ({
+  loading,
+  sales,
+  refreshList,
   editSale,
-  database 
+  database,
 }) => {
-  const [selectedFilter, setSelectedFilter] = useState<string>('date');
+  const [selectedFilter, setSelectedFilter] = useState<keyof Sale>('date');
   const [sortAscending, setSortAscending] = useState<boolean>(false);
 
   const toggleSortOrder = () => setSortAscending((prev) => !prev);
@@ -34,15 +34,18 @@ export const SalesList: React.FC<SalesListProps> = ({
     const sorted = [...sales].sort((a, b) => {
       const aVal = a[selectedFilter];
       const bVal = b[selectedFilter];
-
       let comparison = 0;
 
       if (selectedFilter === 'date') {
-        comparison = new Date(aVal).getTime() - new Date(bVal).getTime();
+        // GARANTIA: Antes de usar, checamos se ambos são strings válidas.
+        if (typeof aVal === 'string' && typeof bVal === 'string') {
+          comparison = new Date(aVal).getTime() - new Date(bVal).getTime();
+        }
       } else if (typeof aVal === 'number' && typeof bVal === 'number') {
         comparison = aVal - bVal;
       } else {
-        comparison = String(aVal).localeCompare(String(bVal));
+        // Tratamos o resto como string, com um fallback para o caso de ser undefined
+        comparison = String(aVal ?? '').localeCompare(String(bVal ?? ''));
       }
 
       return sortAscending ? comparison : -comparison;
@@ -63,7 +66,7 @@ export const SalesList: React.FC<SalesListProps> = ({
       }
     >
       <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', gap: 2 }}>
-        <SalesFilter onFilterChange={(value) => setSelectedFilter(value)} />
+        <SalesFilter onFilterChange={(value) => setSelectedFilter(value as keyof Sale)} />
         <IconButton onClick={toggleSortOrder} aria-label="Alternar ordem">
           {sortAscending ? <ArrowUpwardIcon /> : <ArrowDownwardIcon />}
         </IconButton>
@@ -81,10 +84,10 @@ export const SalesList: React.FC<SalesListProps> = ({
         </Box>
       ) : (
         sortedSales.map((sale) => (
-          <SalesCard 
-            key={sale.id} 
-            sale={sale} 
-            onDelete={() => handleDeleteSale(sale.id)} 
+          <SalesCard
+            key={sale.id}
+            sale={sale}
+            onDelete={() => handleDeleteSale(sale.id!)}
             onEdit={(sale) => editSale(sale)}
           />
         ))
