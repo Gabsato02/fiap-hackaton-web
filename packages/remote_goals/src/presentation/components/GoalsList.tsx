@@ -51,18 +51,16 @@ export const GoalsList: React.FC<GoalsListProps> = ({
   };
 
   const getTypeLabel = (type: string) => {
-    return type === 'sales' ? 'Vendas' : 'Produção';
+    return 'Vendas'; 
   };
 
   const getTypeColor = (type: string) => {
-    return type === 'sales' ? 'primary' : 'secondary';
+    return 'primary'; 
   };
 
   const formatValue = (value: number, type: string) => {
-    if (type === 'sales') {
-      return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
-    }
-    return `${value} unidades`;
+    // Sempre formato de vendas em reais
+    return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
   };
 
   const formatDate = (dateString: string) => {

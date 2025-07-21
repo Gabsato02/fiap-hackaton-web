@@ -7,10 +7,6 @@ import {
   DialogTitle,
   TextField,
   Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
 } from '@mui/material';
 import { DateInput } from 'hostApp/global_components';
 import { useUserStore } from 'hostApp/store';
@@ -24,16 +20,6 @@ import type { GoalModalProps, Goal } from '../../domain/entities';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-// 🔥 PRODUTOS MOCKADOS
-const MOCK_PRODUCTS = [
-  { id: '1', name: 'Notebook Dell' },
-  { id: '2', name: 'Mouse Logitech' },
-  { id: '3', name: 'Teclado Mecânico' },
-  { id: '4', name: 'Monitor 24"' },
-  { id: '5', name: 'Cadeira Gamer' },
-  { id: '6', name: 'Headset Wireless' },
-];
-
 export const GoalModal: React.FC<GoalModalProps> = ({
   open,
   onClose,
@@ -43,9 +29,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({
   const { userInfo } = useUserStore();
   
   const [title, setTitle] = useState('');
-  const [type, setType] = useState('sales');
   const [targetValue, setTargetValue] = useState('');
-  const [productId, setProductId] = useState('');
   const [startDate, setStartDate] = useState(dayjs.tz(new Date(), 'America/Sao_Paulo'));
   const [endDate, setEndDate] = useState(dayjs.tz(new Date(), 'America/Sao_Paulo').add(1, 'month'));
   const [loading, setLoading] = useState(false);
@@ -53,15 +37,12 @@ export const GoalModal: React.FC<GoalModalProps> = ({
   useEffect(() => {
     if (currentGoal) {
       setTitle(currentGoal.title);
-      setType(currentGoal.type);
       setTargetValue(currentGoal.targetValue.toString());
       setStartDate(dayjs(currentGoal.startDate));
       setEndDate(dayjs(currentGoal.endDate));
     } else {
       setTitle('');
-      setType('sales');
       setTargetValue('');
-      setProductId('');
       setStartDate(dayjs.tz(new Date(), 'America/Sao_Paulo'));
       setEndDate(dayjs.tz(new Date(), 'America/Sao_Paulo').add(1, 'month'));
     }
@@ -74,7 +55,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({
       const goalData: Goal = {
         id: currentGoal?.id || '',
         title,
-        type: type as 'production' | 'sales',
+        type: 'sales',
         targetValue: Number(targetValue),
         startDate: startDate.toISOString(),
         endDate: endDate.toISOString(),
@@ -93,10 +74,6 @@ export const GoalModal: React.FC<GoalModalProps> = ({
 
   const isFormValid = title && Number(targetValue) > 0 && startDate && endDate;
 
-  const getValueLabel = () => {
-    return type === 'sales' ? 'Valor da Meta (R$)' : 'Quantidade Meta (unidades)';
-  };
-
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{currentGoal ? 'Editar Meta' : 'Definir Nova Meta'}</DialogTitle>
@@ -111,48 +88,15 @@ export const GoalModal: React.FC<GoalModalProps> = ({
             />
           </Grid>
 
-          <Grid size={6}>
-            <FormControl fullWidth>
-              <InputLabel>Tipo de Meta</InputLabel>
-              <Select
-                value={type}
-                label="Tipo de Meta"
-                onChange={(e) => setType(e.target.value)}
-              >
-                <MenuItem value="sales">Vendas</MenuItem>
-                <MenuItem value="production">Produção</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid size={6}>
+          <Grid size={12}>
             <TextField
-              label={getValueLabel()}
+              label="Valor da Meta (R$)"
               type="number"
               value={targetValue}
               onChange={(e) => setTargetValue(e.target.value)}
               fullWidth
             />
           </Grid>
-
-          {type === 'production' && (
-            <Grid size={12}>
-              <FormControl fullWidth>
-                <InputLabel>Produto</InputLabel>
-                <Select
-                  value={productId}
-                  label="Produto"
-                  onChange={(e) => setProductId(e.target.value)}
-                >
-                  {MOCK_PRODUCTS.map((product) => (
-                    <MenuItem key={product.id} value={product.id}>
-                      {product.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-          )}
 
           <Grid size={6}>
             <DateInput

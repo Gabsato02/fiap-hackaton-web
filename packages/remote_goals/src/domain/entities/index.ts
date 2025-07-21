@@ -1,7 +1,7 @@
 export interface Goal {
   id?: string;
   title: string;
-  type: 'production' | 'sales';
+  type: 'sales'; // Fixo como vendas
   targetValue: number;
   startDate: string; // timestamp
   endDate: string; // timestamp  
