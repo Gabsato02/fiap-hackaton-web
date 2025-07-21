@@ -3,6 +3,7 @@ import { Box, Typography, Button, Grid } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { GoalModal } from '../components/GoalModal';
 import { GoalsList } from '../components/GoalsList';
+import { GoalNotification } from '../components/GoalNotification';
 import { useUserStore } from 'hostApp/store';
 import dayjs from 'dayjs';
 import type { Goal } from '../../domain/entities';
@@ -12,6 +13,7 @@ import {
   getUserGoals,
   saveGoal,
   deleteGoal,
+  getSalesByPeriod,
 } from '../../infrastructure/repositories';
 
 export const Goals = () => {
@@ -21,6 +23,98 @@ export const Goals = () => {
   const [openGoalModal, setOpenGoalModal] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
   const [loading, setLoading] = useState(false);
+  
+  // Estados para notificação
+  const [showNotification, setShowNotification] = useState(false);
+  const [completedGoal, setCompletedGoal] = useState<Goal | null>(null);
+
+  // Função para verificar metas completadas e mostrar notificação
+  const checkCompletedGoals = (goalsData: Goal[]) => {
+    const previousGoals = goals; // Metas anteriores
+    
+    goalsData.forEach(currentGoal => {
+      const currentValue = currentGoal.currentValue || 0;
+      const isNowCompleted = currentValue >= currentGoal.targetValue;
+      
+      // Buscar a meta anterior para comparar
+      const previousGoal = previousGoals.find(g => g.id === currentGoal.id);
+      const wasCompleted = previousGoal ? (previousGoal.currentValue || 0) >= previousGoal.targetValue : false;
+      
+      // Se a meta acabou de ser completada E ainda não foi notificada
+      if (isNowCompleted && !wasCompleted && !currentGoal.notified) {
+        console.log('🎉 Meta completada!', currentGoal.title);
+        setCompletedGoal(currentGoal);
+        setShowNotification(true);
+        
+        // Marcar como notificada no banco
+        markGoalAsNotified(currentGoal);
+      }
+    });
+  };
+
+  // Função para marcar meta como notificada
+  const markGoalAsNotified = async (goal: Goal) => {
+    try {
+      const updatedGoal = {
+        ...goal,
+        notified: true,
+        isCompleted: true,
+        completedAt: new Date().toISOString(),
+      };
+      
+      if (goal.id) {
+        await editGoal(db, goal.id, updatedGoal);
+        console.log('✅ Meta marcada como notificada');
+      }
+    } catch (error) {
+      console.error('❌ Erro ao marcar meta como notificada:', error);
+    }
+  };
+
+  // Função para calcular o progresso atual das metas
+  const calculateGoalProgress = async (goalsData: Goal[]): Promise<Goal[]> => {
+    const updatedGoals = await Promise.all(
+      goalsData.map(async (goal) => {
+        try {
+          const salesSnapshot = await getSalesByPeriod(
+            db,
+            userInfo?.id || '',
+            goal.startDate,
+            goal.endDate
+          );
+          
+          let currentValue = 0;
+          
+          salesSnapshot.docs.forEach((doc) => {
+            const sale = doc.data() as any;
+            if (goal.type === 'sales') {
+              currentValue += sale.total_price || 0;
+            }
+          });
+          
+          const isCompleted = currentValue >= goal.targetValue;
+          
+          // Atualizar a meta no banco com o currentValue
+          const updatedGoal = {
+            ...goal,
+            currentValue,
+            isCompleted,
+          };
+          
+          if (goal.id) {
+            await editGoal(db, goal.id, updatedGoal);
+          }
+          
+          return updatedGoal;
+        } catch (error) {
+          console.error('❌ Erro ao calcular progresso da meta:', goal.id, error);
+          return goal;
+        }
+      })
+    );
+    
+    return updatedGoals;
+  };
 
   const fetchGoals = async () => {
     if (!userInfo?.id) {
@@ -38,7 +132,13 @@ export const Goals = () => {
       console.log('📊 Metas encontradas:', goalsData);
       console.log('📊 Número de metas:', goalsData.length);
       
-      setGoals(goalsData);
+      // Calcular progresso atual das metas
+      const updatedGoals = await calculateGoalProgress(goalsData);
+      
+      // Verificar se alguma meta foi completada
+      checkCompletedGoals(updatedGoals);
+      
+      setGoals(updatedGoals);
     } catch (error) {
       console.error('❌ Erro ao buscar metas:', error);
     } finally {
@@ -100,11 +200,28 @@ export const Goals = () => {
     setSelectedGoal(null);
   };
 
+  const handleCloseNotification = () => {
+    setShowNotification(false);
+    setCompletedGoal(null);
+  };
+
   useEffect(() => {
     console.log('🚀 Componente Goals carregado');
     console.log('👤 UserInfo:', userInfo);
     fetchGoals();
   }, [userInfo?.id]); // Adicionei dependência do userInfo.id
+
+  // Verificar progresso das metas a cada 30 segundos
+  useEffect(() => {
+    if (!userInfo?.id) return;
+
+    const interval = setInterval(() => {
+      console.log('🔄 Verificando progresso das metas automaticamente...');
+      fetchGoals();
+    }, 30000); // 30 segundos
+
+    return () => clearInterval(interval);
+  }, [userInfo?.id]);
 
   return (
     <Box>
@@ -139,6 +256,14 @@ export const Goals = () => {
         onClose={handleCloseModal}
         onSave={handleSaveGoal}
         currentGoal={selectedGoal}
+      />
+
+      {/* Notificação de meta atingida */}
+      <GoalNotification
+        open={showNotification}
+        goalTitle={completedGoal?.title || ''}
+        targetValue={completedGoal?.targetValue || 0}
+        onClose={handleCloseNotification}
       />
     </Box>
   );
