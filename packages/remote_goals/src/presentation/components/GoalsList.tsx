@@ -12,12 +12,14 @@ import {
 import { Edit, Delete } from '@mui/icons-material';
 import { ConfirmDialog } from 'hostApp/global_components';
 import { Goal } from '../../domain/entities';
+import { GoalProgress } from './GoalProgress';
 
 interface GoalsListProps {
   goals: Goal[];
   onEdit: (goal: Goal) => void;
   onDelete: (goalId: string) => void;
   loading?: boolean;
+  userId: string; // ← Adicionado userId
 }
 
 export const GoalsList: React.FC<GoalsListProps> = ({
@@ -25,6 +27,7 @@ export const GoalsList: React.FC<GoalsListProps> = ({
   onEdit,
   onDelete,
   loading = false,
+  userId, // ← Recebendo userId
 }) => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
   const [goalToDelete, setGoalToDelete] = React.useState<string | null>(null);
@@ -146,6 +149,9 @@ export const GoalsList: React.FC<GoalsListProps> = ({
                       {formatDate(goal.startDate)} - {formatDate(goal.endDate)}
                     </Typography>
                   </Box>
+
+                  {/* Progresso da Meta */}
+                  <GoalProgress goal={goal} userId={userId} />
                 </Stack>
               </CardContent>
             </Card>

@@ -24,17 +24,28 @@ import type { GoalModalProps, Goal } from '../../domain/entities';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+// 🔥 PRODUTOS MOCKADOS
+const MOCK_PRODUCTS = [
+  { id: '1', name: 'Notebook Dell' },
+  { id: '2', name: 'Mouse Logitech' },
+  { id: '3', name: 'Teclado Mecânico' },
+  { id: '4', name: 'Monitor 24"' },
+  { id: '5', name: 'Cadeira Gamer' },
+  { id: '6', name: 'Headset Wireless' },
+];
+
 export const GoalModal: React.FC<GoalModalProps> = ({
   open,
   onClose,
   onSave,
   currentGoal,
 }) => {
-  const { userInfo } = useUserStore(); // 👈 Usando useUserStore
+  const { userInfo } = useUserStore();
   
   const [title, setTitle] = useState('');
   const [type, setType] = useState('sales');
   const [targetValue, setTargetValue] = useState('');
+  const [productId, setProductId] = useState('');
   const [startDate, setStartDate] = useState(dayjs.tz(new Date(), 'America/Sao_Paulo'));
   const [endDate, setEndDate] = useState(dayjs.tz(new Date(), 'America/Sao_Paulo').add(1, 'month'));
   const [loading, setLoading] = useState(false);
@@ -50,6 +61,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({
       setTitle('');
       setType('sales');
       setTargetValue('');
+      setProductId('');
       setStartDate(dayjs.tz(new Date(), 'America/Sao_Paulo'));
       setEndDate(dayjs.tz(new Date(), 'America/Sao_Paulo').add(1, 'month'));
     }
@@ -66,15 +78,16 @@ export const GoalModal: React.FC<GoalModalProps> = ({
         targetValue: Number(targetValue),
         startDate: startDate.toISOString(),
         endDate: endDate.toISOString(),
-        userId: userInfo?.id || '', // 👈 Usando o userId do usuário logado
+        userId: userInfo?.id || '',
       };
       
       console.log('Meta salva:', goalData);
       console.log('🆔 UserId sendo usado no modal:', userInfo?.id);
-      console.log('� UserInfo completo no modal:', userInfo);
+      console.log('👤 UserInfo completo no modal:', userInfo);
       
       await onSave(goalData);
       setLoading(false);
+      onClose(); // ← Fechar o modal após salvar
     }
   };
 
@@ -122,11 +135,30 @@ export const GoalModal: React.FC<GoalModalProps> = ({
             />
           </Grid>
 
+          {type === 'production' && (
+            <Grid size={12}>
+              <FormControl fullWidth>
+                <InputLabel>Produto</InputLabel>
+                <Select
+                  value={productId}
+                  label="Produto"
+                  onChange={(e) => setProductId(e.target.value)}
+                >
+                  {MOCK_PRODUCTS.map((product) => (
+                    <MenuItem key={product.id} value={product.id}>
+                      {product.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          )}
+
           <Grid size={6}>
             <DateInput
               label="Data de Início"
               value={startDate}
-              onChange={(date: dayjs.Dayjs | null) => setStartDate(date || dayjs())}
+              onChange={(date) => setStartDate(date || dayjs())}
             />
           </Grid>
 
@@ -134,7 +166,7 @@ export const GoalModal: React.FC<GoalModalProps> = ({
             <DateInput
               label="Data de Fim"
               value={endDate}
-              onChange={(date: dayjs.Dayjs | null) => setEndDate(date || dayjs())}
+              onChange={(date) => setEndDate(date || dayjs())}
             />
           </Grid>
         </Grid>

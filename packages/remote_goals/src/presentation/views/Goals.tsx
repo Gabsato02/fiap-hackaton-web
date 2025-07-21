@@ -131,6 +131,7 @@ export const Goals = () => {
         onEdit={handleEditGoal}
         onDelete={handleDeleteGoal}
         loading={loading}
+        userId={userInfo?.id || ''}
       />
 
       <GoalModal
