@@ -2,46 +2,109 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Typography, Button, Grid } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import { GoalModal } from '../components/GoalModal';
+import { GoalsList } from '../components/GoalsList';
+import { useUserStore } from 'hostApp/store';
+import dayjs from 'dayjs';
 import type { Goal } from '../../domain/entities';
+import { db } from '../../infrastructure/database';
+import {
+  editGoal,
+  getUserGoals,
+  saveGoal,
+  deleteGoal,
+} from '../../infrastructure/repositories';
 
 export const Goals = () => {
-  const [goals, setGoals] = useState<Goal[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentGoal, setCurrentGoal] = useState<Goal | null>(null);
+  const { userInfo } = useUserStore();
 
-  useEffect(() => {
-    setLoading(false);
-  }, []);
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [openGoalModal, setOpenGoalModal] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const fetchGoals = async () => {
+    if (!userInfo?.id) {
+      console.log('❌ UserInfo não encontrado:', userInfo);
+      return;
+    }
+    
+    console.log('🔍 Buscando metas para userId:', userInfo.id);
+    setLoading(true);
+    
+    try {
+      const resp = await getUserGoals(db, userInfo.id);
+      const goalsData = resp.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Goal);
+      
+      console.log('📊 Metas encontradas:', goalsData);
+      console.log('📊 Número de metas:', goalsData.length);
+      
+      setGoals(goalsData);
+    } catch (error) {
+      console.error('❌ Erro ao buscar metas:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteGoal = async (goalId: string) => {
+    console.log('🗑️ Deletando meta:', goalId);
+    
+    try {
+      await deleteGoal(db, goalId);
+      console.log('✅ Meta deletada com sucesso!');
+      await fetchGoals(); // Buscar metas novamente
+    } catch (error) {
+      console.error('❌ Erro ao deletar meta:', error);
+    }
+  };
+
+  const handleEditGoal = (goal: Goal) => {
+    const $goal = goal;
+    $goal.startDate = dayjs(goal.startDate).tz('America/Sao_Paulo').format();
+    $goal.endDate = dayjs(goal.endDate).tz('America/Sao_Paulo').format();
+    setSelectedGoal($goal);
+    setOpenGoalModal(true);
+  };
+
+  const handleSaveGoal = async (goal: Goal) => {
+    console.log('💾 Salvando meta:', goal);
+    
+    const payload = goal;
+
+    try {
+      if (!payload.id) {
+        delete payload.id;
+        console.log('➕ Criando nova meta:', payload);
+        await saveGoal(db, payload);
+      } else {
+        console.log('✏️ Editando meta:', payload);
+        await editGoal(db, payload.id, payload);
+        setSelectedGoal(null);
+      }
+
+      console.log('✅ Meta salva com sucesso!');
+      await fetchGoals(); // Buscar metas novamente
+      handleCloseModal(); // 👈 Fechar o modal após salvar
+    } catch (error) {
+      console.error('❌ Erro ao salvar meta:', error);
+    }
+  };
 
   const handleOpenModal = (goal: Goal | null = null) => {
-    setCurrentGoal(goal);
-    setIsModalOpen(true);
+    setSelectedGoal(goal);
+    setOpenGoalModal(true);
   };
 
   const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setCurrentGoal(null);
+    setOpenGoalModal(false);
+    setSelectedGoal(null);
   };
 
-  const handleSaveGoal = async (goalData: Goal) => {
-    try {
-      // Por enquanto só console.log
-      console.log('Salvando meta:', goalData);
-      
-      // TODO: Aqui virá a lógica de salvar no Firebase
-      // if (goalData.id) {
-      //   await updateGoal(db, goalData.id, goalData);
-      // } else {
-      //   await createGoal(db, goalData);
-      // }
-      
-      // fetchGoals(); // TODO: implementar depois
-      handleCloseModal();
-    } catch (error) {
-      console.error('Erro ao salvar meta:', error);
-    }
-  };
+  useEffect(() => {
+    console.log('🚀 Componente Goals carregado');
+    console.log('👤 UserInfo:', userInfo);
+    fetchGoals();
+  }, [userInfo?.id]); // Adicionei dependência do userInfo.id
 
   return (
     <Box>
@@ -63,19 +126,18 @@ export const Goals = () => {
       </Grid>
 
       {/* Lista de metas */}
-      {loading ? (
-        <Typography>Carregando metas...</Typography>
-      ) : (
-        <Typography>
-          {goals.length === 0 ? 'Nenhuma meta definida ainda.' : `${goals.length} metas encontradas`}
-        </Typography>
-      )}
+      <GoalsList
+        goals={goals}
+        onEdit={handleEditGoal}
+        onDelete={handleDeleteGoal}
+        loading={loading}
+      />
 
       <GoalModal
-        open={isModalOpen}
+        open={openGoalModal}
         onClose={handleCloseModal}
         onSave={handleSaveGoal}
-        currentGoal={currentGoal}
+        currentGoal={selectedGoal}
       />
     </Box>
   );

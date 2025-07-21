@@ -1,15 +1,11 @@
 export interface Goal {
   id?: string;
   title: string;
-  description: string;
-  type: 'venda' | 'producao';
-  value: number; 
-  product_id?: string; 
-  product_name?: string; 
-  deadline: string;
-  created_at: string;
-  status: 'active' | 'completed' | 'overdue';
-  user_id: string;
+  type: 'production' | 'sales';
+  targetValue: number;
+  startDate: string; // timestamp
+  endDate: string; // timestamp  
+  userId: string;
 }
 
 export interface GoalModalProps {
