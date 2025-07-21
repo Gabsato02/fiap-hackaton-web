@@ -8,8 +8,9 @@ import {
   Chip,
   Grid,
   Stack,
+  Divider,
 } from '@mui/material';
-import { Edit, Delete } from '@mui/icons-material';
+import { Edit, Delete, Agriculture, PointOfSale } from '@mui/icons-material';
 import { ConfirmDialog } from 'hostApp/global_components';
 import { Goal } from '../../domain/entities';
 import { GoalProgress } from './GoalProgress';
@@ -19,7 +20,7 @@ interface GoalsListProps {
   onEdit: (goal: Goal) => void;
   onDelete: (goalId: string) => void;
   loading?: boolean;
-  userId: string; // ← Adicionado userId
+  userId: string;
 }
 
 export const GoalsList: React.FC<GoalsListProps> = ({
@@ -27,7 +28,7 @@ export const GoalsList: React.FC<GoalsListProps> = ({
   onEdit,
   onDelete,
   loading = false,
-  userId, // ← Recebendo userId
+  userId,
 }) => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
   const [goalToDelete, setGoalToDelete] = React.useState<string | null>(null);
@@ -50,25 +51,25 @@ export const GoalsList: React.FC<GoalsListProps> = ({
     setDeleteConfirmOpen(false);
   };
 
-  const getTypeLabel = (type: string) => {
-    return 'Vendas'; 
-  };
-
-  const getTypeColor = (type: string) => {
-    return 'primary'; 
-  };
+  const getTypeLabel = (type: 'sales' | 'production') => (type === 'sales' ? 'Vendas' : 'Produção');
+  const getTypeColor = (type: 'sales' | 'production') =>
+    type === 'sales' ? 'primary' : 'secondary';
+  const getTypeIcon = (type: 'sales' | 'production') =>
+    type === 'sales' ? <PointOfSale fontSize="small" /> : <Agriculture fontSize="small" />;
 
   const formatValue = (value: number, type: string) => {
-    // Sempre formato de vendas em reais
-    return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+    if (type === 'sales') {
+      return `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+    }
+    return `${value.toLocaleString('pt-BR')} Unidades`;
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR');
+    return new Date(dateString).toLocaleDateString('pt-BR', { timeZone: 'UTC' });
   };
 
   if (loading) {
-    return <Typography>Carregando metas...</Typography>;
+    return <Typography sx={{ textAlign: 'center', mt: 4 }}>Carregando metas...</Typography>;
   }
 
   if (goals.length === 0) {
@@ -86,31 +87,22 @@ export const GoalsList: React.FC<GoalsListProps> = ({
 
   return (
     <Box>
-      <Typography variant="h6" mb={2}>
-        {goals.length} {goals.length === 1 ? 'meta encontrada' : 'metas encontradas'}
-      </Typography>
-
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {goals.map((goal) => (
-          <Grid size={{ xs: 12, md: 6, lg: 4 }} key={goal.id}>
-            <Card elevation={2}>
-              <CardContent>
-                <Stack spacing={2}>
-                  {/* Header com título e ações */}
+          <Grid item xs={12} md={6} lg={4} key={goal.id}>
+            <Card elevation={2} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Stack spacing={1.5}>
                   <Box display="flex" justifyContent="space-between" alignItems="flex-start">
-                    <Typography variant="h6" component="div" flex={1}>
+                    <Typography variant="h6" component="div" flex={1} noWrap>
                       {goal.title}
                     </Typography>
                     <Box>
-                      <IconButton 
-                        size="small" 
-                        onClick={() => onEdit(goal)}
-                        color="primary"
-                      >
+                      <IconButton size="small" onClick={() => onEdit(goal)} color="primary">
                         <Edit />
                       </IconButton>
-                      <IconButton 
-                        size="small" 
+                      <IconButton
+                        size="small"
                         onClick={() => handleDeleteClick(goal.id!)}
                         color="error"
                       >
@@ -119,36 +111,35 @@ export const GoalsList: React.FC<GoalsListProps> = ({
                     </Box>
                   </Box>
 
-                  {/* Tipo */}
-                  <Box>
-                    <Chip 
-                      label={getTypeLabel(goal.type)} 
-                      color={getTypeColor(goal.type) as any}
-                      size="small"
-                    />
-                  </Box>
+                  <Chip
+                    icon={getTypeIcon(goal.type)}
+                    label={getTypeLabel(goal.type)}
+                    color={getTypeColor(goal.type)}
+                    size="small"
+                    sx={{ width: 'fit-content' }}
+                  />
 
-                  {/* Valor */}
+                  {goal.type === 'production' && (
+                    <Typography variant="caption" color="text.secondary">
+                      Produto: <strong>{goal.productName}</strong>
+                    </Typography>
+                  )}
+
+                  <Divider />
+
                   <Box>
                     <Typography variant="body2" color="text.secondary">
                       Meta:
                     </Typography>
-                    <Typography variant="h6" color="primary">
+                    <Typography variant="h5" color={getTypeColor(goal.type)}>
                       {formatValue(goal.targetValue, goal.type)}
                     </Typography>
                   </Box>
 
-                  {/* Datas */}
-                  <Box>
-                    <Typography variant="body2" color="text.secondary">
-                      Período:
-                    </Typography>
-                    <Typography variant="body2">
-                      {formatDate(goal.startDate)} - {formatDate(goal.endDate)}
-                    </Typography>
-                  </Box>
+                  <Typography variant="caption" color="text.secondary">
+                    Período: {formatDate(goal.startDate)} - {formatDate(goal.endDate)}
+                  </Typography>
 
-                  {/* Progresso da Meta */}
                   <GoalProgress goal={goal} userId={userId} />
                 </Stack>
               </CardContent>
@@ -157,7 +148,6 @@ export const GoalsList: React.FC<GoalsListProps> = ({
         ))}
       </Grid>
 
-      {/* Dialog de confirmação de exclusão */}
       <ConfirmDialog
         open={deleteConfirmOpen}
         title="Excluir Meta"
@@ -166,7 +156,6 @@ export const GoalsList: React.FC<GoalsListProps> = ({
         onCancel={handleDeleteCancel}
         confirmText="Excluir"
         cancelText="Cancelar"
-        severity="error"
       />
     </Box>
   );

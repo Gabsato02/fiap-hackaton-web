@@ -1,15 +1,17 @@
 export interface Goal {
   id?: string;
   title: string;
-  type: 'sales'; 
+  type: 'sales' | 'production';
   targetValue: number;
-  currentValue?: number; 
-  startDate: string; 
-  endDate: string; 
+  currentValue?: number;
+  startDate: string;
+  endDate: string;
   userId: string;
   isCompleted?: boolean;
-  completedAt?: string; 
-  notified?: boolean; 
+  completedAt?: string;
+  notified?: boolean;
+  productId?: string;
+  productName?: string;
 }
 
 export interface GoalModalProps {
@@ -24,4 +26,5 @@ export interface GoalsListProps {
   onEdit: (goal: Goal) => void;
   onDelete: (goalId: string) => void;
   loading: boolean;
+  userId: string;
 }
