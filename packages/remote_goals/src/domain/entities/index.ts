@@ -1,15 +1,15 @@
 export interface Goal {
   id?: string;
   title: string;
-  type: 'sales'; // Fixo como vendas
+  type: 'sales'; 
   targetValue: number;
-  currentValue?: number; // Valor atual alcançado
-  startDate: string; // timestamp
-  endDate: string; // timestamp  
+  currentValue?: number; 
+  startDate: string; 
+  endDate: string; 
   userId: string;
-  isCompleted?: boolean; // Se a meta foi concluída
-  completedAt?: string; // Quando foi concluída
-  notified?: boolean; // Se já foi notificado sobre a conclusão
+  isCompleted?: boolean;
+  completedAt?: string; 
+  notified?: boolean; 
 }
 
 export interface GoalModalProps {

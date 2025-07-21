@@ -209,16 +209,15 @@ export const Goals = () => {
     console.log('🚀 Componente Goals carregado');
     console.log('👤 UserInfo:', userInfo);
     fetchGoals();
-  }, [userInfo?.id]); // Adicionei dependência do userInfo.id
+  }, [userInfo?.id]); 
 
-  // Verificar progresso das metas a cada 30 segundos
   useEffect(() => {
     if (!userInfo?.id) return;
 
     const interval = setInterval(() => {
       console.log('🔄 Verificando progresso das metas automaticamente...');
       fetchGoals();
-    }, 30000); // 30 segundos
+    }, 30000); 
 
     return () => clearInterval(interval);
   }, [userInfo?.id]);
