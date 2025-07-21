@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import federation from '@originjs/vite-plugin-federation';
+import dayjs from 'dayjs';
 
 export default defineConfig({
   plugins: [
@@ -21,6 +22,7 @@ export default defineConfig({
         '@mui/icons-material',
         '@emotion/react',
         '@emotion/styled',
+        'dayjs',
       ],
     }),
     {
