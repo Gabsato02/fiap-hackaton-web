@@ -60,3 +60,14 @@ export type Sale = {
   product_id: string;
   seller_id: string;
 };
+
+export type Production = {
+  id?: string;
+  productId: string;
+  productName: string;
+  quantity: number;
+  creationDate: string;
+  harvestDate?: string;
+  userId: string;
+  status: 'in_production' | 'harvested';
+};

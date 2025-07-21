@@ -27,6 +27,7 @@ export default defineConfig({
         '@emotion/react',
         '@emotion/styled',
         'zustand',
+        'dayjs',
       ],
     }),
     {
